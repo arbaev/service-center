@@ -1,2 +1,2 @@
-module Admin::HomeHelper
+module Staff::HomeHelper
 end

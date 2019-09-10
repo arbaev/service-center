@@ -8,12 +8,12 @@ module Accessible
   protected
 
   def check_user
-    if current_admin_staff
+    if current_staff
       flash.clear
-      redirect_to(admin_home_index_path) && return
-    elsif current_user_client
+      redirect_to(staff_home_index_path) && return
+    elsif current_client
       flash.clear
-      redirect_to(user_home_index_path) && return
+      redirect_to(client_home_index_path) && return
     end
   end
 end

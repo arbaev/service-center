@@ -1,9 +1,0 @@
-<% if admin_staff_signed_in? %>
-  <p>Welcome, <strong><%= link_to current_admin_staff.email, admin_staff_session_path(current_admin_staff) %></strong> |
-    <%= link_to 'Logout', destroy_admin_staff_session_path, method: :delete  %>
-  </p>
-<% end %>
-
-<h1>Admin::Home#index</h1>
-<p>Find me in app/views/admin/home/index.html.erb</p>
-<%= javascript_pack_tag 'admin/staff' %>

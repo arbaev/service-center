@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Client from '../../components/client.vue'
+import Client from '../components/client.vue'
 
 document.addEventListener('DOMContentLoaded', () => {
     const app = new Vue({

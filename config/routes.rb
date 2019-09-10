@@ -1,20 +1,14 @@
 Rails.application.routes.draw do
-  root to: 'user/home#index'
+  root to: 'client/home#index'
 
-  namespace :admin do
-    devise_for :staffs, controllers: {
-        sessions: 'admin/sessions'
-    }
+  devise_for :staffs, controllers: { sessions: 'staff/sessions' }
+  devise_for :clients, controllers: { sessions: 'client/sessions' }
 
+  namespace :staff do
     get 'home/index'
   end
 
-  namespace :user do
-    devise_for :clients, controllers: {
-        sessions: 'user/sessions'
-    }
-
+  namespace :client do
     get 'home/index'
   end
-
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::HomeController, type: :controller do
+RSpec.describe Staff::HomeController, type: :controller do
 
   describe "GET #index" do
     it "returns http success" do

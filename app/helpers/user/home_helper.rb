@@ -1,2 +1,2 @@
-module User::HomeHelper
+module Client::HomeHelper
 end
