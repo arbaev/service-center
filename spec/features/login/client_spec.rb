@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 feature 'Client can sign in' do
-  given(:client) { create(:client) }
-  given(:staff) { create(:staff) }
+  given(:client) { create :client }
+  given(:staff) { create :staff }
 
   background { visit new_client_session_path }
 
-  scenario 'Registered as client user tries to sign in', js:true do
+  scenario 'Registered as client user tries to sign in', js: true do
     sign_in(client)
 
     expect(page).to have_content "Welcome, #{client.email}"
-    expect(page).to have_content "Client component"
+    expect(page).to have_content 'Client component'
   end
 
   scenario 'Unregistered user tries to sign in' do
@@ -29,11 +31,10 @@ feature 'Client can sign in' do
   end
 end
 
-feature 'Client can sign out', %q{
+feature 'Client can sign out', "
   As an authenticated client user
   I'd like to be able to sign out
-} do
-
+" do
   given(:client) { create(:client) }
 
   background { visit new_client_session_path }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 feature 'Staff can sign in' do
@@ -6,11 +8,11 @@ feature 'Staff can sign in' do
 
   background { visit new_staff_session_path }
 
-  scenario 'Registered as staff user tries to sign in', js:true do
+  scenario 'Registered as staff user tries to sign in', js: true do
     sign_in(staff)
 
     expect(page).to have_content "Welcome, #{staff.email}"
-    expect(page).to have_content "Staff component"
+    expect(page).to have_content 'Staff component'
   end
 
   scenario 'Unregistered user tries to sign in' do
@@ -29,11 +31,10 @@ feature 'Staff can sign in' do
   end
 end
 
-feature 'Staff can sign out', %q{
+feature 'Staff can sign out', "
   As an authenticated staff user
   I'd like to be able to sign out
-} do
-
+" do
   given(:staff) { create(:staff) }
 
   background { visit new_staff_session_path }
