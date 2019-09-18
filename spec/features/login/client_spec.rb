@@ -39,7 +39,7 @@ feature 'Client can sign out', "
 
   background { visit new_client_session_path }
 
-  scenario 'Registered as client user tries to sign out' do
+  scenario 'Registered as client user tries to sign out', js: true do
     sign_in(client)
     click_on 'Logout'
 

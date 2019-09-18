@@ -1,22 +1,48 @@
-<template>
-  <div id="app">
-    <p>{{ message }}</p>
-  </div>
+<template lang="pug">
+  #app
+    navbar(:user="user")
+    p {{ message }}
 </template>
 
 <script>
-export default {
-  data: function () {
-    return {
-      message: "Staff component"
+    import Navbar from './app/navbar.vue'
+    import { backendGet } from './app/api/index.js'
+
+    export default {
+        data: function () {
+            return {
+                user: {},
+                message: "Staff component"
+            }
+        },
+        components: {
+            Navbar
+        },
+        created() {
+            this.fetchUser();
+        },
+        methods: {
+            fetchUser() {
+                let vm = this;
+                backendGet('/staff/home/user')
+                    .then(function (response) {
+                        vm.user = response.data.user;
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    })
+                    .finally(function () {
+                        // always executed
+                    });
+            }
+        }
     }
-  }
-}
 </script>
 
 <style scoped>
-p {
-  font-size: 2em;
-  text-align: center;
-}
+  p {
+    font-size: 2em;
+    text-align: center;
+  }
 </style>

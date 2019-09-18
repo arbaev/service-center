@@ -19,4 +19,13 @@ RSpec.describe Client::HomeController, type: :controller do
       expect(response).to render_template :index
     end
   end
+
+  describe 'GET #user' do
+    it 'returns currrent user data' do
+      login(client)
+      get :user
+
+      expect(assigns(:user)).to eq client
+    end
+  end
 end

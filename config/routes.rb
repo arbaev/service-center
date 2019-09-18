@@ -5,10 +5,14 @@ Rails.application.routes.draw do
   devise_for :clients, controllers: { sessions: 'client/sessions' }
 
   namespace :staff do
-    get 'home/index'
+    resources :home, only: :index do
+      get :user, on: :collection
+    end
   end
 
   namespace :client do
-    get 'home/index'
+    resources :home, only: :index do
+      get :user, on: :collection
+    end
   end
 end
