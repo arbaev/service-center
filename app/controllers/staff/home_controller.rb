@@ -6,6 +6,14 @@ class Staff::HomeController < ApplicationController
   def index; end
 
   def user
-    @user = current_staff
+    options = { links: { logout_link: destroy_staff_session_path } }
+
+    render json: serializer.new(current_staff, options)
+  end
+
+  private
+
+  def serializer
+    UserSerializer
   end
 end

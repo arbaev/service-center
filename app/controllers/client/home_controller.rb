@@ -6,6 +6,14 @@ class Client::HomeController < ApplicationController
   def index; end
 
   def user
-    @user = current_client
+    options = { links: { logout_link: destroy_client_session_path } }
+
+    render json: serializer.new(current_client, options)
+  end
+
+  private
+
+  def serializer
+    UserSerializer
   end
 end

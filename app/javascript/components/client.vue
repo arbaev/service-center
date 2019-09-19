@@ -26,7 +26,8 @@ export default {
             let vm = this;
             backendGet('/client/home/user')
                 .then(function (response) {
-                    vm.user = response.data.user;
+                    vm.user = response.data.data.attributes;
+                    vm.user.logout_link = response.data.links.logout_link;
                 })
                 .catch(function (error) {
                     // handle error

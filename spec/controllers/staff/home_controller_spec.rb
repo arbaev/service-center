@@ -21,11 +21,19 @@ RSpec.describe Staff::HomeController, type: :controller do
   end
 
   describe 'GET #user' do
-    it 'returns currrent user data' do
+    it 'returns current user json data' do
       login(staff)
-      get :user
+      get :user, format: :json
 
-      expect(assigns(:user)).to eq staff
+      json_data = {
+        data: {
+          id: staff.id.to_s,
+          attributes: { email: staff.email.to_s }
+        },
+        links: { logout_link: destroy_staff_session_path }
+      }
+
+      expect(JSON.parse response.body).to include_json(json_data)
     end
   end
 end
