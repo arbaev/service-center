@@ -3,7 +3,7 @@
     navbar(:user="user")
     p {{ message }}
     .container.px-4
-      dashboard(:clientsList="clientsList" @reloadClientsList="fetchClientsList")
+      dashboard
 </template>
 
 <script>
@@ -16,7 +16,6 @@
             return {
                 user: {},
                 message: "Staff component",
-                clientsList: []
             }
         },
         components: {
@@ -25,7 +24,6 @@
         },
         created() {
             this.fetchUser();
-            this.fetchClientsList();
         },
         methods: {
             fetchUser() {
@@ -34,18 +32,6 @@
                     .then(function (response) {
                         vm.user = response.data.data.attributes;
                         vm.user.logout_link = response.data.links.logout_link;
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
-                    .finally(function () {
-                    });
-            },
-            fetchClientsList() {
-                let vm = this;
-                backendGet('/client/home')
-                    .then(function (response) {
-                        vm.clientsList = response.data.data
                     })
                     .catch(function (error) {
                         console.log(error);
