@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   end
 
   namespace :client do
-    resources :home, only: :index do
+    resources :home, only: %i[index create] do
       get :user, on: :collection
     end
   end
