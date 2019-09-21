@@ -31,6 +31,6 @@ class Client::HomeController < ApplicationController
   end
 
   def client_params
-    params.permit(:email, :password)
+    params.permit(:fullname, :phone, :email, :password)
   end
 end
