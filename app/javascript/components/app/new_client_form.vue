@@ -7,19 +7,25 @@
         div(class="md:w-1/3")
           label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name") fullname
         div(class="md:w-2/3")
-          input(v-model="client.fullname" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="full name (min 5 chrs)")
+          input(v-model.lazy="client.fullname" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="full name (min 5 chrs)")
+          .error(v-show='client.fullname && !isFullnameValid')
+            span.text-red-600 Five letters minimum
 
       div(class="md:flex md:items-center mb-6")
         div(class="md:w-1/3")
           label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name") phone
         div(class="md:w-2/3")
-          input(v-model="client.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-phone" type="text" placeholder="phone (digits only)")
+          input(v-model.lazy="client.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-phone" type="text" placeholder="phone (digits only)")
+          .error(v-show='client.phone && !isPhoneValid')
+            span.text-red-600 Enter 10 digits
 
       div(class="md:flex md:items-center mb-6")
         div(class="md:w-1/3")
           label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name") email
         div(class="md:w-2/3")
-          input(v-model="client.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-email" type="text" placeholder="client's email")
+          input(v-model.lazy="client.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-email" type="text" placeholder="client's email")
+          .error(v-show='client.email && !isEmailValid')
+            span.text-red-600 Enter correct email
 
       div(class="md:flex md:items-center mb-6")
         div(class="md:w-1/3")
@@ -67,6 +73,20 @@
                     formErrors.insertAdjacentHTML('beforeend', '<p class="alert alert-alert">' + key + ' ' + errors[key] +'</p>');
                 });
             }
+        },
+        computed: {
+            isFullnameValid() {
+                let regexFullname = /^[A-zА-яЁё]{5,}$/;
+                return regexFullname.test(this.client.fullname);
+            },
+            isPhoneValid() {
+                let regexPhone = /^\d{10}$/;
+                return regexPhone.test(this.client.phone);
+            },
+            isEmailValid() {
+                let regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return regexEmail.test(this.client.email);
+            },
         }
     }
 </script>
