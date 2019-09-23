@@ -3,6 +3,7 @@
 class Client::HomeController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :authenticate_client!, only: :user
+  before_action :authenticate_staff!, only: :create
 
   def index
     render json: serializer.new(Client.all)
@@ -27,7 +28,7 @@ class Client::HomeController < ApplicationController
   private
 
   def serializer
-    UserSerializer
+    ClientSerializer
   end
 
   def client_params

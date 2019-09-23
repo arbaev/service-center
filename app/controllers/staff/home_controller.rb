@@ -14,6 +14,6 @@ class Staff::HomeController < ApplicationController
   private
 
   def serializer
-    UserSerializer
+    StaffSerializer
   end
 end

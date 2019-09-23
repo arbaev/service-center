@@ -5,5 +5,5 @@ class Client < ApplicationRecord
 
   validates :fullname, :phone, presence: true
   validates :fullname, length: { minimum: 5 }
-  validates :phone, numericality: { only_integer: true }
+  # validates :phone, numericality: { only_integer: true }
 end

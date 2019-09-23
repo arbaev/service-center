@@ -1,4 +1,4 @@
-class UserSerializer
+class StaffSerializer
   include FastJsonapi::ObjectSerializer
 
   attributes :email

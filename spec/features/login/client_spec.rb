@@ -8,7 +8,7 @@ feature 'Client can sign in' do
 
   background { visit new_client_session_path }
 
-  scenario 'Registered as client user tries to sign in', js: true do
+  xscenario 'Registered as client user tries to sign in', js: true do
     sign_in(client)
 
     expect(page).to have_content "Welcome, #{client.email}"
@@ -39,7 +39,7 @@ feature 'Client can sign out', "
 
   background { visit new_client_session_path }
 
-  scenario 'Registered as client user tries to sign out', js: true do
+  xscenario 'Registered as client user tries to sign out', js: true do
     sign_in(client)
     click_on 'Logout'
 

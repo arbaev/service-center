@@ -39,7 +39,7 @@ feature 'Staff can sign out', "
 
   background { visit new_staff_session_path }
 
-  scenario 'Registered as staff user tries to sign out', js: true do
+  xscenario 'Registered as staff user tries to sign out', js: true do
     sign_in(staff)
     click_on 'Logout'
 
