@@ -28,7 +28,7 @@
         methods: {
             fetchClientsList() {
                 let vm = this;
-                backendGet('/client/home')
+                backendGet('/staff/client')
                     .then(function (response) {
                         vm.clientsList = response.data.data
                     })

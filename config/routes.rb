@@ -9,16 +9,13 @@ Rails.application.routes.draw do
   namespace :staff do
     get :user, to: 'staff#user'
 
-    resources :home, only: :index do
-      get :user, on: :collection
-    end
+    resources :client, only: %i[index create]
+    resources :home, only: :index
   end
 
   namespace :client do
     get :user, to: 'client#user'
 
-    resources :home, only: %i[index create] do
-      get :user, on: :collection
-    end
+    resources :home, only: :index
   end
 end

@@ -50,7 +50,7 @@
         methods: {
             addClient() {
                 let vm = this;
-                backendPost('/client/home', vm.client)
+                backendPost('/staff/client', vm.client)
                     .then(function (response) {
                         vm.$emit('reloadClientsList');
                         vm.clearInputs();
