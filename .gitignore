@@ -60,9 +60,6 @@ bower.json
 # Ignore Byebug command history file.
 .byebug_history
 
-# Ignore RSpec tests history file.
-/spec/examples.txt
-
 # Ignore node_modules
 node_modules/
 
