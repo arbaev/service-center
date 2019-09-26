@@ -19,7 +19,7 @@ RSpec.describe Staff::StaffController, type: :controller do
           links: { logout_link: destroy_staff_session_path }
         }
 
-        expect(JSON.parse response.body).to include_json(json_data)
+        expect(JSON.parse response.body).to include_json json_data
       end
     end
 

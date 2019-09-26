@@ -16,23 +16,6 @@ RSpec.describe Client::HomeController, type: :controller do
     end
   end
 
-  describe 'GET #user' do
-    it 'returns current user json data' do
-      login(client)
-      get :user, format: :json
-
-      json_data = {
-        data: {
-          id: client.id.to_s,
-          attributes: { email: client.email.to_s }
-        },
-        links: { logout_link: destroy_client_session_path }
-      }
-
-      expect(JSON.parse response.body).to include_json(json_data)
-    end
-  end
-
   describe 'POST #create' do
 
     context 'with valid attributes' do

@@ -24,7 +24,7 @@ export default {
     methods: {
         fetchUser() {
             let vm = this;
-            backendGet('/client/home/user')
+            backendGet('/client/user')
                 .then(function (response) {
                     vm.user = response.data.data.attributes;
                     vm.user.logout_link = response.data.links.logout_link;
