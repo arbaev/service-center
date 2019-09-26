@@ -28,7 +28,7 @@
         methods: {
             fetchUser() {
                 let vm = this;
-                backendGet('/staff/home/user')
+                backendGet('/staff/user')
                     .then(function (response) {
                         vm.user = response.data.data.attributes;
                         vm.user.logout_link = response.data.links.logout_link;

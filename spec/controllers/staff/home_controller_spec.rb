@@ -19,21 +19,4 @@ RSpec.describe Staff::HomeController, type: :controller do
       expect(response).to render_template :index
     end
   end
-
-  describe 'GET #user' do
-    it 'returns current user json data' do
-      login(staff)
-      get :user, format: :json
-
-      json_data = {
-        data: {
-          id: staff.id.to_s,
-          attributes: { email: staff.email.to_s }
-        },
-        links: { logout_link: destroy_staff_session_path }
-      }
-
-      expect(JSON.parse response.body).to include_json(json_data)
-    end
-  end
 end

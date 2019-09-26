@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   root to: 'client/home#index'
 
@@ -5,6 +7,8 @@ Rails.application.routes.draw do
   devise_for :clients, controllers: { sessions: 'client/sessions' }
 
   namespace :staff do
+    get :user, to: 'staff#user'
+
     resources :home, only: :index do
       get :user, on: :collection
     end
