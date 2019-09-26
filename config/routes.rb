@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  root to: 'client/home#index'
+  root to: 'index#index'
 
   devise_for :staffs, controllers: { sessions: 'staff/sessions' }
   devise_for :clients, controllers: { sessions: 'client/sessions' }
