@@ -1,6 +1,6 @@
 <template lang="pug">
   #app
-    navbar(:user="user")
+    navbar
     p {{ message }}
     .container.px-4
       dashboard
@@ -9,12 +9,10 @@
 <script>
     import Navbar from './app/navbar.vue'
     import Dashboard from './app/dashboard.vue'
-    import { backendGet } from './app/api/index.js'
 
     export default {
         data: function () {
             return {
-                user: {},
                 message: "Staff component",
             }
         },
@@ -22,24 +20,6 @@
             Navbar,
             Dashboard
         },
-        created() {
-            this.fetchUser();
-        },
-        methods: {
-            fetchUser() {
-                let vm = this;
-                backendGet('/staff/user')
-                    .then(function (response) {
-                        vm.user = response.data.data.attributes;
-                        vm.user.logout_link = response.data.links.logout_link;
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
-                    .finally(function () {
-                    });
-            },
-        }
     }
 </script>
 

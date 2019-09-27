@@ -25,21 +25,20 @@ RSpec.describe Staff::StaffController, type: :controller do
 
     context 'if unauthenticated staff user' do
       let(:client) { create(:client) }
-      let(:json_error) { { error: 'You need to sign in or sign up before continuing.' } }
 
-      it 'returns error when not logged' do
+      it 'returns empty json when not logged' do
         get :user, format: :json
 
-        expect(response).to have_http_status :unauthorized
-        expect(JSON.parse response.body).to include_json json_error
+        expect(response).to have_http_status :ok
+        expect(JSON.parse response.body).to be_empty
       end
 
-      it 'returns error when logged as Client' do
+      it 'returns empty json when logged as Client' do
         login(client)
         get :user, format: :json
 
-        expect(response).to have_http_status :unauthorized
-        expect(JSON.parse response.body).to include_json json_error
+        expect(response).to have_http_status :ok
+        expect(JSON.parse response.body).to be_empty
       end
     end
   end

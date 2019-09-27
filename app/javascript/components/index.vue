@@ -1,6 +1,6 @@
 <template lang="pug">
   #app
-    navbar(:user="user")
+    navbar
     h1 {{ message }}
 </template>
 
@@ -11,7 +11,6 @@ import { backendGet } from './app/api/index.js'
 export default {
     data: function () {
         return {
-          user: { email: 'DELETE_ME@AT.NOW' },
           message: "App component"
         }
     },
