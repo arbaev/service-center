@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Staff::ClientController < ApplicationController
-  # skip_before_action :verify_authenticity_token
+  skip_before_action :verify_authenticity_token
   before_action :authenticate_staff!
 
   def index
@@ -14,7 +14,7 @@ class Staff::ClientController < ApplicationController
     if @client.save
       render json: serializer.new(@client), status: :created
     else
-      render json: { errors: @client.errors }, status: :unprocessable_entity
+      render json: { errors: @client.errors }, status: :ok
     end
   end
 

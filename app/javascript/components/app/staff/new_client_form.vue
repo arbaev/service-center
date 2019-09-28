@@ -2,7 +2,9 @@
   #new-client-form
     span Add new client
     form(class="w-full max-w-sm")
-      #form-errors
+      #form-errors(v-show="notEmpty(errors)")
+        ul(v-for="(error, key) in errors")
+          li(class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 m-1 rounded relative" role="alert") {{ key }} {{ error.join(', ') }}
       div(class="md:flex md:items-center mb-6")
         div(class="md:w-1/3")
           label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name") fullname
@@ -39,12 +41,15 @@
 
 <script>
     import { backendPost } from '../api/index.js'
+    import {empty} from '../../mixins/is_empty.js'
 
     export default {
         name: "new_client_form",
+        mixins: [empty],
         data: function () {
             return {
                 client: {},
+                errors: {}
             }
         },
         methods: {
@@ -52,31 +57,21 @@
                 let vm = this;
                 backendPost('/staff/client', vm.client)
                     .then(function (response) {
-                        vm.$emit('reloadClientsList');
-                        vm.clearInputs();
+                        if(response.data.errors) {
+                          vm.errors = response.data.errors;
+                        } else {
+                          vm.$emit('reloadClientsList');
+                          vm.client = {};
+                          vm.errors = {};
+                        }
                     })
                     .catch(function (error) {
-                        vm.showErrors(error.response.data.errors);
+                        console.log(error)
                     })
-                    .finally(function () {
-                    });
             },
-            clearInputs() {
-                this.client.fullname = '';
-                this.client.phone = '';
-                this.client.email = '';
-                this.client.password = '';
-            },
-            showErrors(errors) {
-                let formErrors = document.getElementById("form-errors");
-                Object.keys(errors).forEach(function (key){
-                    formErrors.insertAdjacentHTML('beforeend', '<p class="alert alert-alert">' + key + ' ' + errors[key] +'</p>');
-                });
-            }
         },
         computed: {
             isFullnameValid() {
-                return true;
                 let regexFullname = /^[A-zА-яЁё]{5,50}$/;
                 return regexFullname.test(this.client.fullname);
             },
@@ -91,7 +86,3 @@
         }
     }
 </script>
-
-<style scoped>
-
-</style>
