@@ -19,9 +19,11 @@
 
 <script>
     import {backendGet} from './api/index.js'
+    import {empty} from '../mixins/is_empty.js'
 
     export default {
         name: "navbar",
+        mixins: [empty],
         data: function () {
             return {
                 user: {}
@@ -50,12 +52,6 @@
                     .catch(function (error) {
                         console.log(error);
                     })
-            },
-            notEmpty(obj) {
-                return Object.keys(obj).length > 0 && obj.constructor === Object
-            },
-            isEmpty(obj) {
-                return !this.notEmpty(obj);
             }
         }
     }
