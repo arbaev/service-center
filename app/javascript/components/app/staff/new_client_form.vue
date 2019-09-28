@@ -13,7 +13,7 @@
 
       div(class="md:flex md:items-center mb-6")
         div(class="md:w-1/3")
-          label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name") phone
+          label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-phone") phone
         div(class="md:w-2/3")
           input(v-model.lazy="client.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-phone" type="text" placeholder="phone (digits only)")
           .error(v-show='client.phone && !isPhoneValid')
@@ -21,7 +21,7 @@
 
       div(class="md:flex md:items-center mb-6")
         div(class="md:w-1/3")
-          label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name") email
+          label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-email") email
         div(class="md:w-2/3")
           input(v-model.lazy="client.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-email" type="text" placeholder="client's email")
           .error(v-show='client.email && !isEmailValid')
@@ -29,7 +29,7 @@
 
       div(class="md:flex md:items-center mb-6")
         div(class="md:w-1/3")
-          label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name") password
+          label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-password") password
         div(class="md:w-2/3")
           input(v-model="client.password" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="text" placeholder="create new password")
 
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-    import { backendPost } from './api/index.js'
+    import { backendPost } from '../api/index.js'
 
     export default {
         name: "new_client_form",
@@ -76,11 +76,12 @@
         },
         computed: {
             isFullnameValid() {
-                let regexFullname = /^[A-zА-яЁё]{5,}$/;
+                return true;
+                let regexFullname = /^[A-zА-яЁё]{5,50}$/;
                 return regexFullname.test(this.client.fullname);
             },
             isPhoneValid() {
-                let regexPhone = /^\d{10}$/;
+                let regexPhone = /^[0-9]{10}$/;
                 return regexPhone.test(this.client.phone);
             },
             isEmailValid() {

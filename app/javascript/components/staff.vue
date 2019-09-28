@@ -8,7 +8,7 @@
 
 <script>
     import Navbar from './app/navbar.vue'
-    import Dashboard from './app/dashboard.vue'
+    import Dashboard from './app/staff/dashboard.vue'
 
     export default {
         data: function () {
