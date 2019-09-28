@@ -7,20 +7,20 @@
 </template>
 
 <script>
-    import Navbar from './app/navbar.vue'
-    import Dashboard from './app/staff/dashboard.vue'
+  import Navbar from './app/navbar.vue'
+  import Dashboard from './app/staff/dashboard.vue'
 
-    export default {
-        data: function () {
-            return {
-                message: "Staff component",
-            }
-        },
-        components: {
-            Navbar,
-            Dashboard
-        },
-    }
+  export default {
+    data: function () {
+      return {
+        message: "Staff component",
+      }
+    },
+    components: {
+      Navbar,
+      Dashboard
+    },
+  }
 </script>
 
 <style scoped>

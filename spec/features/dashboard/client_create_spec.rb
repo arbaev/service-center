@@ -17,6 +17,7 @@ feature 'Staff user can create Client user', js: true do
     fill_in 'phone', with: client.phone
     fill_in 'email', with: client.email
     fill_in 'password', with: client.password
+    sleep 3 # unstable without wait 3 sec minimum :-(
     click_on 'Create new client'
 
     within '#clients-list' do

@@ -5,23 +5,23 @@
 </template>
 
 <script>
-import Navbar from './app/navbar.vue'
+  import Navbar from './app/navbar.vue'
 
-export default {
+  export default {
     data: function () {
-        return {
-          message: "Client component"
-        }
+      return {
+        message: "Client component"
+      }
     },
     components: {
-        Navbar
+      Navbar
     },
-}
+  }
 </script>
 
 <style scoped>
-p {
-  font-size: 2em;
-  text-align: center;
-}
+  p {
+    font-size: 2em;
+    text-align: center;
+  }
 </style>

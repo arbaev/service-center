@@ -18,41 +18,40 @@
 </template>
 
 <script>
-    import {backendGet} from './api/index.js'
-    import {empty} from '../mixins/is_empty.js'
+  import {backendGet} from './api/index.js'
+  import {empty} from '../mixins/is_empty.js'
 
-    export default {
-        name: "navbar",
-        mixins: [empty],
-        data: function () {
-            return {
-                user: {}
-            }
-        },
-        created() {
-            this.currentUser();
-        },
-        methods: {
-            currentUser() {
-                this.fetchUser('/staff/user');
-                if(this.isEmpty(this.user)) {
-                  this.fetchUser('/client/user');
-                }
-            },
-            fetchUser(path) {
-                let vm = this;
-                backendGet(path)
-                    .then(function (response) {
-                        let attrs = response.data;
-                        if ("data" in attrs) {
-                            vm.user = attrs.data.attributes;
-                            vm.user.logout_link = attrs.links.logout_link;
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
-            }
+  export default {
+    name: "navbar",
+    mixins: [empty],
+    data: function () {
+      return {
+        user: {}
+      }
+    },
+    created() {
+      this.currentUser();
+    },
+    methods: {
+      currentUser() {
+        this.fetchUser('/staff/user');
+        if (this.isEmpty(this.user)) {
+          this.fetchUser('/client/user');
         }
+      },
+      fetchUser(path) {
+        backendGet(path)
+          .then(response => {
+            let attrs = response.data;
+            if ("data" in attrs) {
+              this.user = attrs.data.attributes;
+              this.user.logout_link = attrs.links.logout_link;
+            }
+          })
+          .catch(error =>  {
+            console.log(error);
+          })
+      }
     }
+  }
 </script>

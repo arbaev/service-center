@@ -56,9 +56,9 @@ group :test do
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'launchy'
   gem 'rails-controller-testing'
+  gem 'rspec-json_expectations'
   gem 'shoulda-matchers'
   gem 'webdrivers'
-  gem 'rspec-json_expectations'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

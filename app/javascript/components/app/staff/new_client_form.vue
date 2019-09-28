@@ -40,65 +40,62 @@
 </template>
 
 <script>
-    import { backendPost } from '../api/index.js'
-    import {empty} from '../../mixins/is_empty.js'
+  import {backendPost} from '../api/index.js'
+  import {empty} from '../../mixins/is_empty.js'
 
-    export default {
-        name: "new_client_form",
-        mixins: [empty],
-        data: function () {
-            return {
-                client: {
-                    fullname: '',
-                    phone: '',
-                    email: '',
-                },
-                errors: {},
-                disabled: true,
-            }
+  export default {
+    name: "new_client_form",
+    mixins: [empty],
+    data: function () {
+      return {
+        client: {
+          fullname: '',
+          phone: '',
+          email: '',
         },
-        methods: {
-            addClient() {
-                let vm = this;
-                backendPost('/staff/client', vm.client)
-                    .then(function (response) {
-                        if(response.data.errors) {
-                          vm.errors = response.data.errors;
-                        } else {
-                          vm.$emit('reloadClientsList');
-                          vm.client = {};
-                          vm.errors = {};
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    })
-            },
-        },
-        watch: {
-            client: {
-                handler() {
-                this.disabled = !(this.isFullnameValid && this.isPhoneValid && this.isEmailValid);
-                },
-                deep: true
+        errors: {},
+        disabled: true,
+      }
+    },
+    methods: {
+      addClient() {
+        backendPost('/staff/client', vm.client)
+          .then(response => {
+            if (response.data.errors) {
+              this.errors = response.data.errors;
+            } else {
+              this.$emit('reloadClientsList');
+              this.client = {};
+              this.errors = {};
             }
+          })
+          .catch(error => console.log(error))
+      },
+    },
+    watch: {
+      client: {
+        handler() {
+          this.disabled = !(this.isFullnameValid && this.isPhoneValid && this.isEmailValid);
+        },
+        deep: true
+      }
 
-        },
-        computed: {
-            isFullnameValid() {
-                let regexFullname = /^[A-zА-яЁё]{5,}$/;
-                return regexFullname.test(this.client.fullname.replace(/\s/g,''));
-            },
-            isPhoneValid() {
-                let regexPhone = /^[0-9]{10}$/;
-                return regexPhone.test(this.client.phone.replace(/\D/g,''));
-            },
-            isEmailValid() {
-                let regexEmail = /^.+@.+\..+/i;
-                return regexEmail.test(this.client.email);
-            },
-        }
+    },
+    computed: {
+      isFullnameValid() {
+        let regexFullname = /^[A-zА-яЁё]{5,}$/;
+        return regexFullname.test(this.client.fullname.replace(/\s/g, ''));
+      },
+      isPhoneValid() {
+        let regexPhone = /^[0-9]{10}$/;
+        return regexPhone.test(this.client.phone.replace(/\D/g, ''));
+      },
+      isEmailValid() {
+        let regexEmail = /^.+@.+\..+/i;
+        return regexEmail.test(this.client.email);
+      },
     }
+  }
 </script>
 
 <style scoped>

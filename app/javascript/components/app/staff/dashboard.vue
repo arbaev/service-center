@@ -10,39 +10,28 @@
 </template>
 
 <script>
-    import NewClientForm from './new_client_form'
-    import { backendGet } from '../api/index.js'
+  import NewClientForm from './new_client_form'
+  import {backendGet} from '../api/index.js'
 
-    export default {
-        name: "dashboard",
-        data: function () {
-            return {
-                clientsList: []
-            }
-        },
-        components: {
-          NewClientForm
-        },
-        created() {
-            this.fetchClientsList();
-        },
-        methods: {
-            fetchClientsList() {
-                let vm = this;
-                backendGet('/staff/client')
-                    .then(function (response) {
-                        vm.clientsList = response.data.data
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
-                    .finally(function () {
-                    });
-            },
-        }
+  export default {
+    name: "dashboard",
+    data: function () {
+      return {
+        clientsList: []
+      }
+    },
+    components: {
+      NewClientForm
+    },
+    created() {
+      this.fetchClientsList();
+    },
+    methods: {
+      fetchClientsList() {
+        backendGet('/staff/client')
+          .then(response => this.clientsList = response.data.data)
+          .catch(error => console.log(error));
+      },
     }
+  }
 </script>
-
-<style scoped>
-
-</style>

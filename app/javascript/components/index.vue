@@ -5,24 +5,24 @@
 </template>
 
 <script>
-import Navbar from './app/navbar.vue'
-import { backendGet } from './app/api/index.js'
+  import Navbar from './app/navbar.vue'
+  import {backendGet} from './app/api/index.js'
 
-export default {
+  export default {
     data: function () {
-        return {
-          message: "App component"
-        }
+      return {
+        message: "App component"
+      }
     },
     components: {
-        Navbar
+      Navbar
     },
-}
+  }
 </script>
 
 <style scoped>
-h1 {
-  font-size: 2em;
-  text-align: center;
-}
+  h1 {
+    font-size: 2em;
+    text-align: center;
+  }
 </style>
