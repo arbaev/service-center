@@ -77,7 +77,7 @@ RSpec.describe Staff::ClientController, type: :controller do
       it 'render json errors' do
         post :create, params: attributes_for(:client, :invalid)
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:ok)
         expect(response.body).to include_json(errors: /./)
       end
     end
