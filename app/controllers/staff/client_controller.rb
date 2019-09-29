@@ -18,6 +18,13 @@ class Staff::ClientController < ApplicationController
     end
   end
 
+  def validation
+    @client = Client.new(client_params)
+    @client.valid?
+
+    render json: { errors: @client.errors }, status: :ok
+  end
+
   private
 
   def serializer

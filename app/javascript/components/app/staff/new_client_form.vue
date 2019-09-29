@@ -17,7 +17,7 @@
         div(class="md:w-1/3")
           label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-phone") phone
         div(class="md:w-2/3")
-          input(v-model.lazy="client.phone" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-phone" type="text" placeholder="phone (10 digits)")
+          input(v-model.lazy="client.phone" @blur="validateClient" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-phone" type="text" placeholder="phone (10 digits)")
           .error(v-show='client.phone && !isPhoneValid')
             span.text-red-600 Enter 10 digits
 
@@ -25,7 +25,7 @@
         div(class="md:w-1/3")
           label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-email") email
         div(class="md:w-2/3")
-          input(v-model.lazy.trim="client.email" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-email" type="text" placeholder="client's email")
+          input(v-model.lazy.trim="client.email" @blur="validateClient" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-email" type="text" placeholder="client's email")
           .error(v-show='client.email && !isEmailValid')
             span.text-red-600 Enter correct email
 
@@ -71,6 +71,24 @@
           })
           .catch(error => console.log(error))
       },
+      validateClient() {
+        this.errors = {};
+
+        backendPost('/staff/client/validation', this.client)
+          .then(response => {
+            this.isAlreadyTaken(response, ['email', 'phone'])
+          })
+          .catch(error => console.log(error))
+      },
+      isAlreadyTaken(response, properties) {
+        properties.forEach(property => {
+          let errMessages = response.data.errors[property];
+          if (errMessages && errMessages.includes("has already been taken")) {
+            this.$set(this.errors, property, '');
+            this.errors[property] = errMessages;
+          }
+        });
+      }
     },
     watch: {
       client: {
@@ -79,7 +97,6 @@
         },
         deep: true
       }
-
     },
     computed: {
       isFullnameValid() {

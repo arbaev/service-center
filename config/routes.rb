@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   namespace :staff do
     get :user, to: 'staff#user'
 
-    resources :client, only: %i[index create]
+    resources :client, only: %i[index create] do
+      post :validation, on: :collection
+    end
     resources :home, only: :index
   end
 

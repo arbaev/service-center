@@ -64,7 +64,6 @@ RSpec.describe Staff::ClientController, type: :controller do
             attributes: new_client_attrs
         })
       end
-
     end
 
     context 'with invalid attributes' do
@@ -91,6 +90,26 @@ RSpec.describe Staff::ClientController, type: :controller do
         login(client)
 
         expect { post :create, params: attributes_for(:client) }.to_not change(Client, :count)
+      end
+    end
+  end
+
+  describe 'POST #validation' do
+    before { login(staff) }
+
+    context 'with invalid attributes' do
+      it 'render json of new client errors' do
+        post :validation, params: { phone: 'abc', email: 'xyz' }
+
+        expect(response.body).to include_json(errors: { phone: /./, email: /./ })
+      end
+    end
+
+    context 'with valid attributes' do
+      it 'render empty json atom of errors' do
+        post :validation, params: attributes_for(:client)
+
+        expect(response.body).to include_json(errors: {})
       end
     end
   end
