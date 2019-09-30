@@ -14,7 +14,7 @@ class Staff::ClientController < ApplicationController
     if @client.save
       render json: serializer.new(@client), status: :created
     else
-      render json: { errors: @client.errors }, status: :ok
+      render json: { errors: @client.errors }, status: :unprocessable_entity
     end
   end
 

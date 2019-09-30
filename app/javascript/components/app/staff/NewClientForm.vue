@@ -61,15 +61,13 @@
       addClient() {
         backendPost('/staff/client', this.client)
           .then(response => {
-            if (response.data.errors) {
-              this.errors = response.data.errors;
-            } else {
-              this.$emit('reloadClientsList');
-              this.client = {};
-              this.errors = {};
-            }
+            this.$emit('reloadClientsList');
+            this.client = {};
+            this.errors = {};
           })
-          .catch(error => console.log(error))
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          })
       },
       validateClient() {
         this.errors = {};
