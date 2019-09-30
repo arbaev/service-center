@@ -39,11 +39,12 @@ feature 'Staff can sign out', "
 
   background { visit new_staff_session_path }
 
-  scenario 'Registered as staff user tries to sign out' do
+  scenario 'Registered as staff user tries to sign out', js: true do
     sign_in(staff)
     click_on 'Logout'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
     expect(page).to_not have_content "Welcome, #{staff.email}"
+    expect(page).to have_link 'Login Staff'
+    expect(current_path).to eq root_path
   end
 end
