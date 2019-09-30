@@ -20,9 +20,12 @@ class Staff::ClientController < ApplicationController
 
   def validation
     @client = Client.new(client_params)
-    @client.valid?
+    if @client.valid?
+      render json: serializer.new(@client), status: :ok
+    else
+      render json: { errors: @client.errors }, status: :unprocessable_entity
+    end
 
-    render json: { errors: @client.errors }, status: :ok
   end
 
   private

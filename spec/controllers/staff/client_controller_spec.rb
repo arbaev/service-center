@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Staff::ClientController, type: :controller do
-  let(:client) { create(:client) }
+  let(:client) { build(:client) }
   let(:staff) { create(:staff) }
 
   describe 'GET #index' do
@@ -95,15 +95,23 @@ RSpec.describe Staff::ClientController, type: :controller do
       it 'render json of new client errors' do
         post :validation, params: { phone: 'abc', email: 'xyz' }
 
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include_json(errors: { phone: /./, email: /./ })
       end
     end
 
     context 'with valid attributes' do
-      it 'render empty json atom of errors' do
-        post :validation, params: attributes_for(:client)
+      let(:client_attrs) { attributes_for(:client) }
 
-        expect(response.body).to include_json(errors: {})
+      it 'render json of new client' do
+        post :validation, params: client_attrs
+
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include_json(data: { id: nil, type: 'client',
+                                                      attributes: {
+                                                        fullname: client_attrs[:fullname],
+                                                        email: client_attrs[:email]
+                                                      } })
       end
     end
   end

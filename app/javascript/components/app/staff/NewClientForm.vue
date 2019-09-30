@@ -76,13 +76,15 @@
 
         backendPost('/staff/client/validation', this.client)
           .then(response => {
-            this.isAlreadyTaken(response, ['email', 'phone'])
+            console.log(response);
           })
-          .catch(error => console.log(error))
+          .catch(error => {
+            this.isAlreadyTaken(error.response.data.errors, ['email', 'phone'])
+          })
       },
-      isAlreadyTaken(response, properties) {
+      isAlreadyTaken(errors, properties) {
         properties.forEach(property => {
-          let errMessages = response.data.errors[property];
+          let errMessages = errors[property];
           if (errMessages && errMessages.includes("has already been taken")) {
             this.$set(this.errors, property, '');
             this.errors[property] = errMessages;
