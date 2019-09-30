@@ -7,7 +7,7 @@ class Client < ApplicationRecord
 
   validates :fullname, :phone, presence: true
   validates :fullname, format: { with: /[A-z А-яЁё]{5,}/,
-                                 message: "only allows letters, 5 letters minimum" }
+                                 message: 'only allows letters, 5 letters minimum' }
   validates :phone, length: { is: 10 }, format: { with: /[0-9]{10}/ }
   validates :phone, uniqueness: true
 

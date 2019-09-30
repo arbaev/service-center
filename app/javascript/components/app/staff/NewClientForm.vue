@@ -44,7 +44,7 @@
   import {empty} from '../../mixins/is_empty.js'
 
   export default {
-    name: "new_client_form",
+    name: "NewClientForm",
     mixins: [empty],
     data: function () {
       return {
@@ -104,8 +104,10 @@
         return regexFullname.test(this.client.fullname);
       },
       isPhoneValid() {
-        let regexPhone = /^[0-9]{10}$/;
-        return regexPhone.test(this.client.phone.replace(/\D/g, ''));
+        if(this.client.phone) {
+          let regexPhone = /^[0-9]{10}$/;
+          return regexPhone.test(this.client.phone.replace(/\D/g, ''));
+        }
       },
       isEmailValid() {
         let regexEmail = /^.+@.+\..+/i;

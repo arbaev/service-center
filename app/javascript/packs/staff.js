@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Staff from '../components/staff.vue'
+import Staff from '../components/Staff'
 
 document.addEventListener('DOMContentLoaded', () => {
     const app = new Vue({

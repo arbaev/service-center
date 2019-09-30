@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Index from '../components/index.vue'
+import Index from '../components/Index'
 
 document.addEventListener('DOMContentLoaded', () => {
     const app = new Vue({

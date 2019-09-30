@@ -4,7 +4,7 @@ require 'rails_helper'
 
 feature 'Staff user can create Client user', js: true do
   given(:staff) { create(:staff) }
-  given(:client) { create(:client) }
+  given(:client) { build(:client) }
   given!(:client_old) { create(:client) }
 
   background do

@@ -52,17 +52,11 @@ RSpec.describe Staff::ClientController, type: :controller do
       end
 
       it 'render json of new client' do
-        new_client_attrs = attributes_for(:client)
+        post :create, params: attributes_for(:client)
 
-        post :create, params: new_client_attrs
+        client_json = ClientSerializer.new(Client.last).to_json
 
-        new_client_attrs.delete(:password)
-        new_client_attrs.delete(:password_confirmation)
-
-        expect(response.body).to include_json(data: {
-            id: /\d/,
-            attributes: new_client_attrs
-        })
+        expect(response.body).to eq client_json
       end
     end
 
