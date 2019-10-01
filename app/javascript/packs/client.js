@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import '../assets/quasar.conf'
 import Client from '../components/Client'
 
 document.addEventListener('DOMContentLoaded', () => {
