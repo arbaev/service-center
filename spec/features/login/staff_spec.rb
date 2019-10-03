@@ -44,7 +44,7 @@ feature 'Staff can sign out', "
     click_on 'Logout'
 
     expect(page).to_not have_content "Welcome, #{staff.email}"
-    expect(page).to have_link 'Login Staff'
+    expect(page).to have_link 'Staff Login'
     expect(current_path).to eq root_path
   end
 end

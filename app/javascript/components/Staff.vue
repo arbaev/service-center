@@ -1,14 +1,27 @@
 <template lang="pug">
   #app
-    Navbar
-    p {{ message }}
-    .container.px-4
-      Dashboard
+    q-layout(view="hHh lpR fff")
+      HeaderMain
+
+      q-page-container
+        p {{ message }}
+        Dashboard
+
+      FooterMain
 </template>
 
 <script>
-  import Navbar from './app/Navbar.vue'
+  import HeaderMain from './app/HeaderMain'
+  import FooterMain from './app/FooterMain'
   import Dashboard from './app/staff/Dashboard.vue'
+  import {
+    QLayout,
+    QPageContainer,
+    QPage,
+    QDrawer,
+    QPageSticky,
+    QPageScroller,
+  } from 'quasar'
 
   export default {
     data: function () {
@@ -17,7 +30,14 @@
       }
     },
     components: {
-      Navbar,
+      QLayout,
+      QPageContainer,
+      QPage,
+      QDrawer,
+      QPageSticky,
+      QPageScroller,
+      HeaderMain,
+      FooterMain,
       Dashboard
     },
   }
