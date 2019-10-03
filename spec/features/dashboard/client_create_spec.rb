@@ -14,10 +14,10 @@ feature 'Staff user can create Client user', js: true do
   end
 
   scenario 'creating the Client' do
-    fill_in 'fullname', with: client.fullname
-    fill_in 'phone', with: client.phone
-    fill_in 'email', with: client.email
-    fill_in 'password', with: client.password
+    fill_in 'Your full name', with: client.fullname
+    fill_in 'Your phone number', with: client.phone
+    fill_in 'Your email', with: client.email
+    fill_in 'Enter password', with: client.password
     sleep 3 # unstable under VirtualBox without wait 3 sec minimum :-(
     click_on 'Create new client'
 
@@ -28,36 +28,36 @@ feature 'Staff user can create Client user', js: true do
 
   describe 'does not create new client' do
     scenario 'with wrong fullname' do
-      fill_in 'fullname', with: '123'
-      fill_in 'phone', with: client.phone
+      fill_in 'Your full name', with: '123'
+      fill_in 'Your phone number', with: client.phone
 
       expect(page).to have_content 'Five letters minimum, no digits allowed'
       expect(page).to have_button 'Create new client', disabled: true
     end
 
     scenario 'with wrong phone' do
-      fill_in 'phone', with: 'abc'
-      fill_in 'fullname', with: client.fullname
+      fill_in 'Your phone number', with: 'abc'
+      fill_in 'Your full name', with: client.fullname
 
-      expect(page).to have_content 'Enter 10 digits'
+      expect(page).to have_content 'Please use 10 digits'
       expect(page).to have_button 'Create new client', disabled: true
     end
 
     scenario 'with wrong email' do
-      fill_in 'email', with: 'mail@ru'
-      fill_in 'fullname', with: client.fullname
+      fill_in 'Your email', with: 'mail@ru'
+      fill_in 'Your full name', with: client.fullname
 
       expect(page).to have_content 'Enter correct email'
       expect(page).to have_button 'Create new client', disabled: true
     end
 
     scenario 'with has already been taken attributes' do
-      fill_in 'email', with: client_old.email
-      fill_in 'password', with: client_old.fullname
+      fill_in 'Your email', with: client_old.email
+      fill_in 'Enter password', with: client_old.fullname
       sleep 3 # unstable under VirtualBox without wait 3 sec minimum :-(
 
-      fill_in 'phone', with: client_old.phone
-      fill_in 'fullname', with: client_old.fullname
+      fill_in 'Your phone number', with: client_old.phone
+      fill_in 'Your full name', with: client_old.fullname
       sleep 3 # unstable under VirtualBox without wait 3 sec minimum :-(
 
       expect(page).to have_content 'phone has already been taken'

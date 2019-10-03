@@ -5,7 +5,7 @@
 
       q-page-container
         p {{ message }}
-        Dashboard
+        DashboardClients
 
       FooterMain
 </template>
@@ -13,7 +13,7 @@
 <script>
   import HeaderMain from './app/HeaderMain'
   import FooterMain from './app/FooterMain'
-  import Dashboard from './app/staff/Dashboard.vue'
+  import DashboardClients from './app/staff/DashboardClients'
   import {
     QLayout,
     QPageContainer,
@@ -38,7 +38,7 @@
       QPageScroller,
       HeaderMain,
       FooterMain,
-      Dashboard
+      DashboardClients
     },
   }
 </script>
