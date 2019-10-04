@@ -10,7 +10,6 @@
     QFooter,
     QToolbar,
     QToolbarTitle,
-    QAvatar
   } from 'quasar'
 
   export default {
@@ -21,7 +20,6 @@
       QFooter,
       QToolbar,
       QToolbarTitle,
-      QAvatar
     },
   }
 </script>
