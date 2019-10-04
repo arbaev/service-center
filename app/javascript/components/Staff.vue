@@ -5,6 +5,7 @@
 
       q-page-container
         p {{ message }}
+        DashboardOrganizations
         DashboardClients
 
       FooterMain
@@ -14,6 +15,7 @@
   import HeaderMain from './app/HeaderMain'
   import FooterMain from './app/FooterMain'
   import DashboardClients from './app/staff/DashboardClients'
+  import DashboardOrganizations from './app/staff/DashboardOrganizations'
   import {
     QLayout,
     QPageContainer,
@@ -38,7 +40,8 @@
       QPageScroller,
       HeaderMain,
       FooterMain,
-      DashboardClients
+      DashboardClients,
+      DashboardOrganizations
     },
   }
 </script>

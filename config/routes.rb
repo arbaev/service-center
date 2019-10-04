@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :client, only: %i[index create] do
       post :validation, on: :collection
     end
+    resources :organization, only: :index
     resources :home, only: :index
   end
 
