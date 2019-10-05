@@ -2,6 +2,6 @@
 
 class Staff::OrgTypeController < ApplicationController
   def index
-    render json: { data: OrgType.all.pluck(:name) }, status: :ok
+    render json: { data: OrgType.select(:id, :name) }, status: :ok
   end
 end

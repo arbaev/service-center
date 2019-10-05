@@ -2,6 +2,7 @@
   section#dashboard-organizations.q-mx-xl
     .row
       .col-12.col-sm-6.q-pa-sm
+        NewOrganizationForm(@reloadOrganizationsList="fetchOrganizationsList")
 
       .col-12.col-sm-6.q-pa-sm
         #organizations-list(v-show="organizationsList.length")
@@ -12,6 +13,7 @@
 </template>
 
 <script>
+  import NewOrganizationForm from '../staff/NewOrganizationForm'
   import {backendGet} from '../api'
   import {
     QSpinnerGears,
@@ -25,6 +27,7 @@
       }
     },
     components: {
+      NewOrganizationForm,
       QSpinnerGears,
     },
     created() {
