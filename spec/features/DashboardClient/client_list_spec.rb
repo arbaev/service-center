@@ -9,6 +9,7 @@ feature 'List of all Clients', js:true do
     visit new_staff_session_path
     sign_in staff
     visit staff_home_index_path
+    find('#tab-clients').click
   end
 
   context 'there are some clients' do

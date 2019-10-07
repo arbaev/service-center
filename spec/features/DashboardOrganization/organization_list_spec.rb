@@ -9,6 +9,7 @@ feature 'List of all Organizations', js: true do
     visit new_staff_session_path
     sign_in staff
     visit staff_home_index_path
+    find('#dashboard-organizations').click
   end
 
   context 'there are some organizations' do

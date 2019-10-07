@@ -5,8 +5,26 @@
 
       q-page-container
         p {{ message }}
-        DashboardOrganizations
-        DashboardClients
+
+        q-card
+          q-tabs(
+            v-model="tab"
+            active-color="primary"
+            indicator-color="primary"
+            align="justify"
+            narrow-indicator)
+
+            q-tab#tab-clients(name="clients" label="Clients")
+            q-tab#tab-organizations(name="organizations" label="Organizations")
+
+          q-separator
+
+          q-tab-panels(v-model="tab")
+            q-tab-panel(name="clients")
+              DashboardClients
+
+            q-tab-panel(name="organizations")
+              DashboardOrganizations
 
       FooterMain
 </template>
@@ -23,12 +41,19 @@
     QDrawer,
     QPageSticky,
     QPageScroller,
+    QCard,
+    QTabs,
+    QTabPanels,
+    QTabPanel,
+    QTab,
+    QSeparator,
   } from 'quasar'
 
   export default {
     data: function () {
       return {
         message: "Staff component",
+        tab: 'organizations',
       }
     },
     components: {
@@ -38,6 +63,12 @@
       QDrawer,
       QPageSticky,
       QPageScroller,
+      QCard,
+      QTabs,
+      QTabPanels,
+      QTabPanel,
+      QTab,
+      QSeparator,
       HeaderMain,
       FooterMain,
       DashboardClients,
