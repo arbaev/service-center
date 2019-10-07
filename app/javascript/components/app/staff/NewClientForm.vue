@@ -1,44 +1,51 @@
 <template lang="pug">
-  section#new-client-form
+  section#new-client-form-section
     h4.text-h4 Add new client
-    q-form(@submit="addClient")
-      #form-errors(v-show="notEmpty(errors)")
+    q-form#new-client-form(@submit="addClient" ref="newClientForm")
+      #client-form-errors(v-show="notEmpty(errors)")
         div(v-for="(error, key) in errors")
           q-banner.q-my-sm.bg-red-6.text-white(rounded) {{ key }} {{ error.join(', ') }}
 
       q-input.q-mb-sm(
-        v-model.lazy="client.fullname"
+        v-model="client.fullname"
         label="Your full name"
+        @blur="validateForm"
+        :rules="rules.fullname"
+        lazy-rules
         filled
-        bottom-slots
-        :error="client.fullname.length && !isFullnameValid"
-        error-message="Five letters minimum, no digits allowed")
+        bottom-slots)
 
       q-input.q-mb-sm(
-        v-model.lazy="client.phone"
+        v-model="client.phone"
         @blur="validateClient"
         label="Your phone number"
+        mask="(###) ### - ####"
+        hint="Mask: (###) ### - ####"
+        :rules="rules.phone"
+        type="tel"
+        lazy-rules
+        unmasked-value
         filled
-        bottom-slots
-        :error="client.phone.length && !isPhoneValid"
-        error-message="Please use 10 digits"
-        type="tel")
+        bottom-slots)
 
       q-input.q-mb-sm(
-        v-model.lazy.trim="client.email"
+        v-model.trim="client.email"
         @blur="validateClient"
         label="Your email"
-        filled
+        type="email"
+        :rules="rules.email"
         bottom-slots
-        :error="client.email.length && !isEmailValid"
-        error-message="Enter correct email"
-        type="email")
+        lazy-rules
+        filled)
 
       q-input.q-mb-sm(
         v-model="client.password"
         label="Enter password"
-        filled
-        :type="isPwd ? 'password' : 'text'")
+        @input="validateForm"
+        :type="isPwd ? 'password' : 'text'"
+        :rules="rules.password"
+        lazy-rules
+        filled)
         template(v-slot:append)
           q-icon.cursor-pointer(
             :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'"
@@ -75,7 +82,23 @@
         },
         errors: {},
         disabled: true,
-        isPwd: true
+        isPwd: true,
+        rules: {
+          fullname: [
+            val => !!val || 'Field is required',
+            val => this.isFullnameValid || 'Only letters are allowed',
+            val => val.length >= 5 || 'Please use mimimum 5 characters',
+          ],
+          phone: [
+            val => !!val || 'Field is required',
+            val => val.length === 10 || 'Please use 10 digits'
+          ],
+          email: [
+            val => !!val || 'Field is required',
+            val => this.isEmailValid || 'Enter correct email'
+          ],
+          password: [val => !!val || 'Field is required']
+        }
       }
     },
     components: {
@@ -86,6 +109,11 @@
       QBanner
     },
     methods: {
+      validateForm() {
+        this.$refs.newClientForm.validate().then(success => {
+          this.disabled = !success;
+        })
+      },
       addClient() {
         backendPost('/staff/client', this.client)
           .then(response => {
@@ -102,6 +130,7 @@
 
         backendPost('/staff/client/validation', this.client)
           .then(response => {
+            this.validateForm();
             console.log(response);
           })
           .catch(error => {
@@ -118,23 +147,16 @@
         });
       }
     },
-    watch: {
-      client: {
-        handler() {
-          this.disabled = !(this.isFullnameValid && this.isPhoneValid && this.isEmailValid);
-        },
-        deep: true
-      }
-    },
     computed: {
       isFullnameValid() {
-        let regexFullname = /^[A-z А-яЁё]{5,}$/;
+        let regexFullname = /^[A-z А-яЁё]*$/;
         return regexFullname.test(this.client.fullname);
       },
-      isPhoneValid() {
-          let regexPhone = /^[0-9]{10}$/;
-          return regexPhone.test(this.client.phone.replace(/\D/g, ''));
-      },
+      // it doesn't need if Quasar phone mask used
+      // isPhoneValid() {
+      //     let regexPhone = /^[0-9]{10}$/;
+      //     return regexPhone.test(this.client.phone.replace(/\D/g, ''));
+      // },
       isEmailValid() {
         let regexEmail = /^.+@.+\..+/i;
         return regexEmail.test(this.client.email);
