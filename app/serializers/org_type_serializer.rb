@@ -3,9 +3,6 @@
 class OrganizationSerializer
   include FastJsonapi::ObjectSerializer
 
-  belongs_to :org_type
-
   attributes :name
-  attributes :inn
-  attributes :ogrn
+  has_many :organizations
 end
