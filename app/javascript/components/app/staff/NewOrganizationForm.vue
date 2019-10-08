@@ -12,7 +12,7 @@
         option-value="id"
         option-label="name"
         label="Тип организации"
-        @blur="validateForm"
+        @blur="validateOrganizationForm"
         :rules="[val => !!val || 'Field is required']"
         lazy-rules
         emit-value
@@ -22,7 +22,7 @@
       q-input.q-mb-sm(
         v-model.lazy="organization.name"
         label="Название организации"
-        @blur="validateForm"
+        @blur="validateOrganizationForm"
         :rules="[val => !!val || 'Field is required']"
         lazy-rules
         filled)
@@ -30,7 +30,7 @@
       q-input.q-mb-sm(
         v-model.lazy="organization.inn"
         label="ИНН"
-        @blur="validateForm"
+        @blur="validateOrganizationForm"
         :rules="[val => !!val || 'Field is required']"
         lazy-rules
         filled)
@@ -38,7 +38,7 @@
       q-input.q-mb-sm(
         v-model.trim="organization.ogrn"
         label="ОГРН"
-        @input="validateForm"
+        @blur="validateOrganizationForm"
         :rules="[val => !!val || 'Field is required']"
         filled)
 
@@ -87,7 +87,7 @@
       this.fetchOrganizationTypes();
     },
     methods: {
-      validateForm() {
+      validateOrganizationForm() {
         this.$refs.newOrganizationForm.validate().then(success => {
           this.disabled = !success;
         })

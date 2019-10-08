@@ -6,25 +6,11 @@
       q-page-container
         p {{ message }}
 
-        q-card
-          q-tabs(
-            v-model="tab"
-            active-color="primary"
-            indicator-color="primary"
-            align="justify"
-            narrow-indicator)
+        DashboardOrganizations
 
-            q-tab#tab-clients(name="clients" label="Clients")
-            q-tab#tab-organizations(name="organizations" label="Organizations")
+        q-separator
 
-          q-separator
-
-          q-tab-panels(v-model="tab")
-            q-tab-panel(name="clients")
-              DashboardClients
-
-            q-tab-panel(name="organizations")
-              DashboardOrganizations
+        DashboardClients
 
       FooterMain
 </template>
@@ -53,7 +39,6 @@
     data: function () {
       return {
         message: "Staff component",
-        tab: 'organizations',
       }
     },
     components: {
@@ -63,11 +48,6 @@
       QDrawer,
       QPageSticky,
       QPageScroller,
-      QCard,
-      QTabs,
-      QTabPanels,
-      QTabPanel,
-      QTab,
       QSeparator,
       HeaderMain,
       FooterMain,
