@@ -1,7 +1,15 @@
 <template lang="pug">
   section#new-client-form-section
     h4.text-h4 Add new client
-    q-form#new-client-form(@submit="addClient" ref="newClientForm")
+    q-form#new-client-form(
+      @submit="addClient"
+      ref="newClientForm"
+      no-error-focus
+      autocorrect="off"
+      autocapitalize="off"
+      autocomplete="off"
+      spellcheck="false")
+
       #client-form-errors(v-show="notEmpty(errors)")
         div(v-for="(error, key) in errors")
           q-banner.q-my-sm.bg-red-6.text-white(rounded) {{ key }} {{ error.join(', ') }}

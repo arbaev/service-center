@@ -1,7 +1,11 @@
 <template lang="pug">
   section#new-organization-form-section
     h4.text-h4 Add new organization
-    q-form#new-organization-form(@submit="addOrganization" ref="newOrganizationForm")
+    q-form#new-organization-form(
+      @submit="addOrganization"
+      ref="newOrganizationForm"
+      no-error-focus)
+
       #organization-form-errors(v-show="notEmpty(errors)")
         div(v-for="(error, key) in errors")
           q-banner.q-my-sm.bg-red-6.text-white(rounded) {{ key }} {{ error.join(', ') }}
