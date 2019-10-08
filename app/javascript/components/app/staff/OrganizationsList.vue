@@ -5,8 +5,11 @@
       :data="organizationsList"
       no-data-label="No organizations yet"
       :columns="columns"
+<<<<<<< HEAD
       :loading="loading"
       :pagination.sync="pagination"
+=======
+>>>>>>> b4f10d8f9d67049cac50c5e512d6ddbc257531aa
       row-key="name")
 </template>
 
@@ -17,7 +20,11 @@
   } from 'quasar'
 
   export default {
+<<<<<<< HEAD
     props: ['organizationsList', 'loading'],
+=======
+    props: ['organizationsList'],
+>>>>>>> b4f10d8f9d67049cac50c5e512d6ddbc257531aa
     data: function () {
       return {
         columns: [
@@ -35,11 +42,14 @@
           { name: 'inn', label: 'ИНН', field: row => row.attributes.inn },
           { name: 'ogrn', label: 'ОГРН', field: row => row.attributes.ogrn },
         ],
+<<<<<<< HEAD
         pagination: {
           sortBy: 'name',
           descending: false,
           rowsPerPage: 8
         },
+=======
+>>>>>>> b4f10d8f9d67049cac50c5e512d6ddbc257531aa
       }
     },
     components: {

@@ -5,7 +5,12 @@
         NewOrganizationForm(@reloadOrganizationsList="fetchOrganizationsList")
 
       .col-12.col-sm-6.q-pa-sm
+<<<<<<< HEAD
         OrganizationsList(:organizations-list="organizationsList" :loading="organizationsListLoading")
+=======
+        q-spinner-gears(v-if="organizationsListLoading" color="blue-grey-6" size="3em")
+        OrganizationsList(v-else :organizations-list="organizationsList")
+>>>>>>> b4f10d8f9d67049cac50c5e512d6ddbc257531aa
 
 </template>
 
