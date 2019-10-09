@@ -7,6 +7,7 @@
       .col-12.col-sm-6.q-pa-sm
         OrganizationsList(
           :organizations-list="organizationsList"
+          @clickDeleteOrg="deleteOrganization"
           :loading="organizationsListLoading")
 
 </template>
@@ -14,7 +15,7 @@
 <script>
   import NewOrganizationForm from '../staff/NewOrganizationForm'
   import OrganizationsList from '../staff/OrganizationsList'
-  import {backendGet} from '../api'
+  import {backendGet, backendDelete} from '../api'
   import {
     QSpinnerGears,
     QTable,
@@ -62,6 +63,15 @@
           org.attributes.org_type = this.orgTypes.find(obj => { return obj.id == org_type_obj.id })
         });
       },
+      deleteOrganization(id) {
+        backendDelete('/staff/organization', id)
+          .then(response => {
+            const elemIndex = this.organizationsList.findIndex(org => org.id === id);
+            this.organizationsList.splice(elemIndex, 1);
+            }
+          )
+          .catch(error => console.log(error));
+      }
     }
   }
 </script>

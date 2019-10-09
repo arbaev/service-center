@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     end
 
     resources :org_type, only: :index
-    resources :organization, only: %i[index create]
+    resources :organization, only: %i[index create destroy]
     resources :home, only: :index
   end
 

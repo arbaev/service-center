@@ -19,6 +19,16 @@ class Staff::OrganizationController < ApplicationController
     end
   end
 
+  def destroy
+    @organization = Organization.find(params[:id])
+
+    if @organization.destroy
+      render json: serializer.new(@organization), status: :ok
+    else
+      render json: { errors: @organization.errors }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def serializer

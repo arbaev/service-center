@@ -42,4 +42,36 @@ RSpec.describe Staff::OrganizationController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    let!(:organization) { create(:organization) }
+
+    context 'Staff delete organization' do
+      before { login(staff) }
+
+      it 'deletes the organization' do
+        expect { delete :destroy, params: { id: organization } }.to change(Organization, :count).by(-1)
+      end
+
+      it 'return :ok and organiztion' do
+        delete :destroy, params: { id: organization }
+
+        expect(response).to have_http_status :ok
+        expect(response.body).to have_text organization.name
+      end
+    end
+
+    context 'Unauthorized user delete organization' do
+      before { login(client) }
+
+      it 'but organization does not deletes' do
+        expect { delete :destroy, params: { id: organization } }.to_not change(Organization, :count)
+      end
+
+      it 'redirect to login page' do
+        delete :destroy, params: { id: organization }
+        expect(response).to redirect_to new_staff_session_path
+      end
+    end
+  end
 end
