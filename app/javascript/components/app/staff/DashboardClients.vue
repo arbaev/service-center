@@ -14,7 +14,7 @@
 
 <script>
   import NewClientForm from '../staff/NewClientForm'
-  import {backendGet} from '../api'
+  import {backend} from "../api";
   import {
     QSpinnerGears,
   } from 'quasar'
@@ -35,7 +35,7 @@
     },
     methods: {
       fetchClientsList() {
-        backendGet('/staff/client')
+        backend.staff.clients()
           .then(response => this.clientsList = response.data.data)
           .catch(error => console.log(error))
           .finally(() => this.clientsListLoading = false);

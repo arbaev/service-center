@@ -13,13 +13,13 @@
 </template>
 
 <script>
-  import NewOrganizationForm from '../staff/NewOrganizationForm'
-  import OrganizationsList from '../staff/OrganizationsList'
-  import {backendGet, backendDelete} from '../api'
+  import {backend} from '../api';
+  import NewOrganizationForm from '../staff/NewOrganizationForm';
+  import OrganizationsList from '../staff/OrganizationsList';
   import {
     QSpinnerGears,
     QTable,
-  } from 'quasar'
+  } from 'quasar';
 
   export default {
     data: function () {
@@ -40,7 +40,7 @@
     },
     methods: {
       fetchOrganizationTypes() {
-        backendGet('/staff/org_type')
+        backend.staff.orgTypes()
           .then(response => {
             this.orgTypes = response.data.data;
             this.fetchOrganizationsList();
@@ -48,7 +48,7 @@
           .catch(error => console.log(error));
       },
       fetchOrganizationsList() {
-        backendGet('/staff/organization')
+        backend.staff.organizations()
           .then(response => {
             this.organizationsList = response.data.data;
             this.setOrgTypeAttribute();
@@ -64,7 +64,7 @@
         });
       },
       deleteOrganization(id) {
-        backendDelete('/staff/organization', id)
+        backend.staff.deleteOrganization(id)
           .then(response => {
             const elemIndex = this.organizationsList.findIndex(org => org.id === id);
             this.organizationsList.splice(elemIndex, 1);

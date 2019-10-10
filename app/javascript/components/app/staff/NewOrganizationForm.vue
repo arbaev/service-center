@@ -55,7 +55,7 @@
 </template>
 
 <script>
-  import { backendGet, backendPost } from '../api/index.js'
+  import {backend} from "../api/index";
   import {empty} from '../../mixins/is_empty'
   import {
     QForm,
@@ -97,12 +97,12 @@
         })
       },
       fetchOrganizationTypes() {
-        backendGet('/staff/org_type')
+        backend.staff.orgTypes()
           .then(response => this.orgTypes = response.data.data)
           .catch(error => console.log(error));
       },
       addOrganization() {
-        backendPost('/staff/organization', { organization: this.organization })
+        backend.staff.createOrganization(this.organization)
           .then(response => {
             this.$emit('reloadOrganizationsList');
             this.organization = {};

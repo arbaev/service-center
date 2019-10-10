@@ -1,17 +1,5 @@
 import axios from 'axios'
 
-export function backendGet(url) {
-  return axios.get(url);
-}
-
-export function backendPost(url, params) {
-  return axios.post(url, params);
-}
-
-export function backendDelete(url, id) {
-  return axios.delete(`${url}/${id}`);
-}
-
 const adapter = axios.create({
   baseURL: '/'
 });
@@ -22,6 +10,14 @@ const backend = {
   },
   staff: {
     user: () => adapter.get('/staff/user'),
+    clients: () => adapter.get('/staff/client'),
+    createClient: (client) => adapter.post('/staff/client', client),
+    validateClient: (client) => adapter.post('/staff/client/validation', client),
+    orgTypes: () => adapter.get('/staff/org_type'),
+    organizations: () => adapter.get('/staff/organization'),
+    deleteOrganization: (id) => adapter.delete(`/staff/organization/${id}`),
+    createOrganization: (organization) => adapter.post('/staff/organization',
+      { organization: organization }),
   }
 };
 

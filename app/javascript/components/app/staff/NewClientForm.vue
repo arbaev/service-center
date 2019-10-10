@@ -68,15 +68,15 @@
 </template>
 
 <script>
-  import {backendPost} from '../api/index.js'
-  import {empty} from '../../mixins/is_empty'
+  import {backend} from "../api/index";
+  import {empty} from '../../mixins/is_empty';
   import {
     QForm,
     QInput,
     QIcon,
     QBtn,
     QBanner
-  } from 'quasar'
+  } from 'quasar';
 
   export default {
     name: "NewClientForm",
@@ -123,7 +123,7 @@
         })
       },
       addClient() {
-        backendPost('/staff/client', this.client)
+        backend.staff.createClient(this.client)
           .then(response => {
             this.$emit('reloadClientsList');
             this.client = {};
@@ -137,10 +137,9 @@
       validateClient() {
         this.errors = {};
 
-        backendPost('/staff/client/validation', this.client)
+        backend.staff.validateClient(this.client)
           .then(response => {
             this.validateForm();
-            console.log(response);
           })
           .catch(error => {
             this.isAlreadyTaken(error.response.data.errors, ['email', 'phone'])
