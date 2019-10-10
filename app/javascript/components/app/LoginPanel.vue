@@ -1,6 +1,6 @@
 <template lang="pug">
   div
-    div(v-if="notEmpty(user)")
+    div(v-if="user")
       span Welcome,
         strong  {{ user.email }}
         |!
@@ -11,43 +11,15 @@
 </template>
 
 <script>
-  import {backendGet} from './api/index.js'
-  import {empty} from '../mixins/is_empty.js'
-  import {QBtn} from 'quasar'
+  import {QBtn} from 'quasar';
 
   export default {
-    mixins: [empty],
-    data: function() {
-      return {
-        user: {}
-      }
+    props: ["user"],
+    data() {
+      return {}
     },
     components: {
       QBtn
     },
-    created() {
-      this.currentUser();
-    },
-    methods: {
-      currentUser() {
-        this.fetchUser('/staff/user');
-        if (this.isEmpty(this.user)) {
-          this.fetchUser('/client/user');
-        }
-      },
-      fetchUser(path) {
-        backendGet(path)
-          .then(response => {
-            let attrs = response.data;
-            if ("data" in attrs) {
-              this.user = attrs.data.attributes;
-              this.user.logout_link = attrs.links.logout_link;
-            }
-          })
-          .catch(error =>  {
-            console.log(error);
-          })
-      }
-    }
   }
 </script>

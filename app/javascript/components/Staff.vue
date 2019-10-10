@@ -1,7 +1,7 @@
 <template lang="pug">
   #app
     q-layout(view="hHh lpR fff")
-      HeaderMain
+      HeaderMain(:user="user")
 
       q-page-container
         p {{ message }}
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+  import {backend} from "./app/api";
   import HeaderMain from './app/HeaderMain'
   import FooterMain from './app/FooterMain'
   import DashboardClients from './app/staff/DashboardClients'
@@ -54,6 +55,7 @@
       return {
         message: "Staff component",
         tab: 'organizations',
+        user: {},
       }
     },
     components: {
@@ -74,6 +76,22 @@
       DashboardClients,
       DashboardOrganizations
     },
+    created() {
+      this.fetchCurrentUser();
+    },
+    methods: {
+      fetchCurrentUser() {
+        backend.staff.user()
+          .then(response => {
+            const attrs = response.data;
+            this.user = attrs.data.attributes;
+            this.user.logout_link = attrs.links.logout_link;
+          })
+          .catch(error =>  {
+            console.log(error.response);
+          })
+      },
+    }
   }
 </script>
 
