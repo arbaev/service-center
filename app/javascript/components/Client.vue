@@ -1,21 +1,60 @@
 <template lang="pug">
   #app
-    Navbar
-    p {{ message }}
+    q-layout(view="hHh lpR fff")
+      HeaderMain(:user="user")
+
+      q-page-container
+      p {{ message }}
+
+      FooterMain
 </template>
 
 <script>
-  import Navbar from './app/Navbar.vue'
+  import {backend} from "./app/api";
+  import HeaderMain from './app/HeaderMain'
+  import FooterMain from './app/FooterMain'
+  import {
+    QLayout,
+    QPageContainer,
+    QPage,
+    QDrawer,
+    QPageSticky,
+    QPageScroller,
+  } from 'quasar'
 
   export default {
     data: function () {
       return {
-        message: "Client component"
+        message: "Client component",
+        user: {},
       }
     },
     components: {
-      Navbar
+      QLayout,
+      QPageContainer,
+      QPage,
+      QDrawer,
+      QPageSticky,
+      QPageScroller,
+      HeaderMain,
+      FooterMain
     },
+    created() {
+      this.fetchCurrentUser();
+    },
+    methods: {
+      fetchCurrentUser() {
+        backend.client.user()
+          .then(response => {
+            const attrs = response.data;
+            this.user = attrs.data.attributes;
+            this.user.logout_link = attrs.links.logout_link;
+          })
+          .catch(error =>  {
+            console.log(error.response);
+          })
+      },
+    }
   }
 </script>
 

@@ -44,7 +44,7 @@ feature 'Client can sign out', "
     click_on 'Logout'
 
     expect(page).to_not have_content "Welcome, #{client.email}"
-    expect(page).to have_link 'Login Client'
+    expect(page).to have_link 'Client Login'
     expect(current_path).to eq root_path
   end
 end

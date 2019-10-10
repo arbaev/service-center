@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_21_064542) do
+ActiveRecord::Schema.define(version: 2019_10_04_093615) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,22 @@ ActiveRecord::Schema.define(version: 2019_09_21_064542) do
     t.index ["email"], name: "index_clients_on_email", unique: true
     t.index ["phone"], name: "index_clients_on_phone", unique: true
     t.index ["reset_password_token"], name: "index_clients_on_reset_password_token", unique: true
+  end
+
+  create_table "org_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "inn", null: false
+    t.string "ogrn", null: false
+    t.bigint "org_type_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["org_type_id"], name: "index_organizations_on_org_type_id"
   end
 
   create_table "staffs", force: :cascade do |t|

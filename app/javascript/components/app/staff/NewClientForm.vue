@@ -1,47 +1,82 @@
 <template lang="pug">
-  #new-client-form
-    span Add new client
-    form(class="w-full max-w-sm")
-      #form-errors(v-show="notEmpty(errors)")
-        ul(v-for="(error, key) in errors")
-          li(class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 m-1 rounded relative" role="alert") {{ key }} {{ error.join(', ') }}
-      div(class="md:flex md:items-center mb-6")
-        div(class="md:w-1/3")
-          label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-full-name") fullname
-        div(class="md:w-2/3")
-          input(v-model.lazy="client.fullname" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-full-name" type="text" placeholder="full name (min 5 chrs)")
-          .error(v-show='client.fullname && !isFullnameValid')
-            span.text-red-600 Five letters minimum, no digits allowed
+  section#new-client-form-section
+    h4.text-h4 Add new client
+    q-form#new-client-form(
+      @submit="addClient"
+      ref="newClientForm"
+      no-error-focus
+      autocorrect="off"
+      autocapitalize="off"
+      autocomplete="off"
+      spellcheck="false")
 
-      div(class="md:flex md:items-center mb-6")
-        div(class="md:w-1/3")
-          label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-phone") phone
-        div(class="md:w-2/3")
-          input(v-model.lazy="client.phone" @blur="validateClient" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-phone" type="text" placeholder="phone (10 digits)")
-          .error(v-show='client.phone && !isPhoneValid')
-            span.text-red-600 Enter 10 digits
+      #client-form-errors(v-show="notEmpty(errors)")
+        div(v-for="(error, key) in errors")
+          q-banner.q-my-sm.bg-red-6.text-white(rounded) {{ key }} {{ error.join(', ') }}
 
-      div(class="md:flex md:items-center mb-6")
-        div(class="md:w-1/3")
-          label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-email") email
-        div(class="md:w-2/3")
-          input(v-model.lazy.trim="client.email" @blur="validateClient" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-email" type="text" placeholder="client's email")
-          .error(v-show='client.email && !isEmailValid')
-            span.text-red-600 Enter correct email
+      q-input.q-mb-sm(
+        v-model="client.fullname"
+        label="Your full name"
+        @blur="validateForm"
+        :rules="rules.fullname"
+        lazy-rules
+        filled
+        bottom-slots)
 
-      div(class="md:flex md:items-center mb-6")
-        div(class="md:w-1/3")
-          label(class="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4" for="inline-password") password
-        div(class="md:w-2/3")
-          input(v-model="client.password" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" id="inline-password" type="text" placeholder="create new password")
+      q-input.q-mb-sm(
+        v-model="client.phone"
+        @blur="validateClient"
+        label="Your phone number"
+        mask="(###) ### - ####"
+        hint="Mask: (###) ### - ####"
+        :rules="rules.phone"
+        type="tel"
+        lazy-rules
+        unmasked-value
+        filled
+        bottom-slots)
 
-      div(class="flex items-center justify-between")
-        button(@click="addClient" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button" :disabled='disabled') Create new client
+      q-input.q-mb-sm(
+        v-model.trim="client.email"
+        @blur="validateClient"
+        label="Your email"
+        type="email"
+        :rules="rules.email"
+        bottom-slots
+        lazy-rules
+        filled)
+
+      q-input.q-mb-sm(
+        v-model="client.password"
+        label="Enter password"
+        @input="validateForm"
+        :type="isPwd ? 'password' : 'text'"
+        :rules="rules.password"
+        lazy-rules
+        filled)
+        template(v-slot:append)
+          q-icon.cursor-pointer(
+            :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'"
+            @click="isPwd = !isPwd")
+
+      q-btn.q-mb-sm.float-right(
+        label="Create new client"
+        type="submit"
+        :disable="disabled"
+        no-caps
+        color="primary")
 </template>
 
 <script>
-  import {backendPost} from '../api/index.js'
-  import {empty} from '../../mixins/is_empty.js'
+  import {backend} from "../api/index";
+  import {empty} from '../../mixins/is_empty';
+  import {
+    QForm,
+    QInput,
+    QIcon,
+    QBtn,
+    QBanner
+  } from 'quasar';
 
   export default {
     name: "NewClientForm",
@@ -55,15 +90,45 @@
         },
         errors: {},
         disabled: true,
+        isPwd: true,
+        rules: {
+          fullname: [
+            val => !!val || 'Field is required',
+            val => this.isFullnameValid || 'Only letters are allowed',
+            val => val.length >= 5 || 'Please use mimimum 5 characters',
+          ],
+          phone: [
+            val => !!val || 'Field is required',
+            val => val.length === 10 || 'Please use 10 digits'
+          ],
+          email: [
+            val => !!val || 'Field is required',
+            val => this.isEmailValid || 'Enter correct email'
+          ],
+          password: [val => !!val || 'Field is required']
+        }
       }
     },
+    components: {
+      QForm,
+      QInput,
+      QIcon,
+      QBtn,
+      QBanner
+    },
     methods: {
+      validateForm() {
+        this.$refs.newClientForm.validate().then(success => {
+          this.disabled = !success;
+        })
+      },
       addClient() {
-        backendPost('/staff/client', this.client)
+        backend.staff.createClient(this.client)
           .then(response => {
             this.$emit('reloadClientsList');
             this.client = {};
             this.errors = {};
+            this.$refs.newClientForm.resetValidation();
           })
           .catch(error => {
             this.errors = error.response.data.errors;
@@ -72,9 +137,9 @@
       validateClient() {
         this.errors = {};
 
-        backendPost('/staff/client/validation', this.client)
+        backend.staff.validateClient(this.client)
           .then(response => {
-            console.log(response);
+            this.validateForm();
           })
           .catch(error => {
             this.isAlreadyTaken(error.response.data.errors, ['email', 'phone'])
@@ -90,25 +155,16 @@
         });
       }
     },
-    watch: {
-      client: {
-        handler() {
-          this.disabled = !(this.isFullnameValid && this.isPhoneValid && this.isEmailValid);
-        },
-        deep: true
-      }
-    },
     computed: {
       isFullnameValid() {
-        let regexFullname = /^[A-z А-яЁё]{5,}$/;
+        let regexFullname = /^[A-z А-яЁё]*$/;
         return regexFullname.test(this.client.fullname);
       },
-      isPhoneValid() {
-        if(this.client.phone) {
-          let regexPhone = /^[0-9]{10}$/;
-          return regexPhone.test(this.client.phone.replace(/\D/g, ''));
-        }
-      },
+      // it doesn't need if Quasar phone mask used
+      // isPhoneValid() {
+      //     let regexPhone = /^[0-9]{10}$/;
+      //     return regexPhone.test(this.client.phone.replace(/\D/g, ''));
+      // },
       isEmailValid() {
         let regexEmail = /^.+@.+\..+/i;
         return regexEmail.test(this.client.email);
@@ -116,11 +172,3 @@
     }
   }
 </script>
-
-<style scoped>
-  button:disabled {
-    cursor: not-allowed;
-    pointer-events: all !important;
-    background-color: lightgrey;
-  }
-</style>
