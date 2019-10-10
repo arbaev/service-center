@@ -25,7 +25,6 @@ class Staff::ClientController < ApplicationController
     else
       render json: { errors: @client.errors }, status: :unprocessable_entity
     end
-
   end
 
   private
