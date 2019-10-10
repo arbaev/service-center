@@ -128,6 +128,7 @@
             this.$emit('reloadClientsList');
             this.client = {};
             this.errors = {};
+            this.$refs.newClientForm.resetValidation();
           })
           .catch(error => {
             this.errors = error.response.data.errors;

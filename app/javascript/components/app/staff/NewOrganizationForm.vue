@@ -107,6 +107,7 @@
             this.$emit('reloadOrganizationsList');
             this.organization = {};
             this.errors = {};
+            this.$refs.newOrganizationForm.resetValidation();
           })
           .catch(error => {
             this.errors = error.response.data.errors;
