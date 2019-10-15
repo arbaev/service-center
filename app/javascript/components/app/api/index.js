@@ -12,6 +12,7 @@ const backend = {
     user: () => adapter.get('/staff/user'),
     clients: () => adapter.get('/staff/client'),
     createClient: (client) => adapter.post('/staff/client', client),
+    deleteClient: (id) => adapter.delete(`/staff/client/${id}`),
     validateClient: (client) => adapter.post('/staff/client/validation', client),
     orgTypes: () => adapter.get('/staff/org_type'),
     organizations: () => adapter.get('/staff/organization'),

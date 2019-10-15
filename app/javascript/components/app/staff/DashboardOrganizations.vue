@@ -1,5 +1,5 @@
 <template lang="pug">
-  section#dashboard-organizations.q-mx-sm
+  section#dashboard-organizations.q-mx-xl
     .row
       .col-12.col-sm-6.q-pa-sm
         NewOrganizationForm(@reloadOrganizationsList="fetchOrganizationsList")
@@ -18,7 +18,6 @@
   import OrganizationsList from '../staff/OrganizationsList';
   import {
     QSpinnerGears,
-    QTable,
   } from 'quasar';
 
   export default {
@@ -33,7 +32,6 @@
       NewOrganizationForm,
       OrganizationsList,
       QSpinnerGears,
-      QTable,
     },
     created() {
       this.fetchOrganizationTypes();

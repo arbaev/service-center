@@ -89,6 +89,38 @@ RSpec.describe Staff::ClientController, type: :controller do
     end
   end
 
+  describe 'DELETE #destroy' do
+    let!(:client) { create(:client) }
+
+    context 'Staff delete client' do
+      before { login(staff) }
+
+      it 'deletes the client' do
+        expect { delete :destroy, params: { id: client } }.to change(Client, :count).by(-1)
+      end
+
+      it 'return :ok and deleted client' do
+        delete :destroy, params: { id: client }
+
+        expect(response).to have_http_status :ok
+        expect(response.body).to have_text client.fullname
+      end
+    end
+
+    context 'Unauthorized user delete client' do
+      before { login(client) }
+
+      it 'but client does not deletes' do
+        expect { delete :destroy, params: { id: client } }.to_not change(Client, :count)
+      end
+
+      it 'redirect to login page' do
+        delete :destroy, params: { id: client }
+        expect(response).to redirect_to new_staff_session_path
+      end
+    end
+  end
+
   describe 'POST #validation' do
     before { login(staff) }
 

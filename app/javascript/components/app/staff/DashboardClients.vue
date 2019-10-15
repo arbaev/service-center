@@ -5,15 +5,16 @@
         NewClientForm(@reloadClientsList="fetchClientsList")
 
       .col-12.col-sm-6.q-pa-sm
-        #clients-list(v-show="clientsList.length")
-          h4.text-h4 Clients list
-          q-spinner-gears(v-if="clientsListLoading" color="blue-grey-6" size="3em")
-          ul(v-else)
-            li(v-for="client in clientsList" :key="client.id" :client="client") {{ client.id }}: {{ client.attributes.email }}
+        ClientsList(
+          :clients-list="clientsList"
+          @clickDeleteClient="deleteClient"
+          :loading="clientsListLoading")
+
 </template>
 
 <script>
-  import NewClientForm from '../staff/NewClientForm'
+  import ClientsList from "./ClientsList";
+  import NewClientForm from "./NewClientForm";
   import {backend} from "../api";
   import {
     QSpinnerGears,
@@ -27,6 +28,7 @@
       }
     },
     components: {
+      ClientsList,
       NewClientForm,
       QSpinnerGears,
     },
@@ -40,6 +42,15 @@
           .catch(error => console.log(error))
           .finally(() => this.clientsListLoading = false);
       },
+      deleteClient(id) {
+        backend.staff.deleteClient(id)
+          .then(response => {
+              const elemIndex = this.clientsList.findIndex(client => client.id === id);
+              this.clientsList.splice(elemIndex, 1);
+            }
+          )
+          .catch(error => console.log(error));
+      }
     }
   }
 </script>
