@@ -14,12 +14,16 @@
             align="justify"
             narrow-indicator)
 
+            q-tab#tab-staffs(name="staffs" label="Staffs")
             q-tab#tab-clients(name="clients" label="Clients")
             q-tab#tab-organizations(name="organizations" label="Organizations")
 
           q-separator
 
           q-tab-panels(v-model="tab")
+            q-tab-panel(name="staffs")
+              DashboardStaffs
+
             q-tab-panel(name="clients")
               DashboardClients
 
@@ -31,10 +35,11 @@
 
 <script>
   import {backend} from "./app/api";
-  import HeaderMain from './app/HeaderMain'
-  import FooterMain from './app/FooterMain'
-  import DashboardClients from './app/staff/DashboardClients'
-  import DashboardOrganizations from './app/staff/DashboardOrganizations'
+  import HeaderMain from './app/HeaderMain';
+  import FooterMain from './app/FooterMain';
+  import DashboardStaffs from './app/staff/DashboardStaffs';
+  import DashboardClients from './app/staff/DashboardClients';
+  import DashboardOrganizations from './app/staff/DashboardOrganizations';
   import {
     QLayout,
     QPageContainer,
@@ -48,7 +53,7 @@
     QTabPanel,
     QTab,
     QSeparator,
-  } from 'quasar'
+  } from 'quasar';
 
   export default {
     data: function () {
@@ -74,6 +79,7 @@
       HeaderMain,
       FooterMain,
       DashboardClients,
+      DashboardStaffs,
       DashboardOrganizations
     },
     created() {
