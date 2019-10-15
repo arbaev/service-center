@@ -43,6 +43,67 @@ RSpec.describe Staff::OrganizationController, type: :controller do
     end
   end
 
+  describe 'POST #create' do
+    let(:orgtype) { create(:org_type) }
+    let(:request_create_org) do
+      post :create,
+           params: { organization: attributes_for(:organization, org_type_id: orgtype.id) },
+           format: :json
+    end
+
+    context 'with valid attributes' do
+      before { login(staff) }
+
+      it 'saves a new organization in the database' do
+        expect { request_create_org }.to change(Organization, :count).by(1)
+      end
+
+      it 'render json of new organization' do
+        request_create_org
+
+        org_json = OrganizationSerializer.new(Organization.last).to_json
+
+        expect(response).to have_http_status(:created)
+        expect(response.body).to eq org_json
+      end
+    end
+
+    context 'with invalid credentials' do
+      it 'does not save new organization when unauthorized' do
+        expect { request_create_org }.to_not change(Organization, :count)
+      end
+
+      it 'does not save new organization when authorized as Client' do
+        login(client)
+
+        expect { request_create_org }.to_not change(Organization, :count)
+      end
+    end
+
+    context 'with invalid attributes' do
+      let(:request_create_org_invalid) do
+        post :create,
+             params: { organization: attributes_for(:organization,
+                                                    :invalid,
+                                                    org_type_id: orgtype.id) },
+             format: :json
+      end
+
+      before { login(staff) }
+
+      it 'does not save new organization' do
+        expect { request_create_org_invalid }.to_not change(Organization, :count)
+      end
+
+      it 'render json errors' do
+        request_create_org_invalid
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.body).to include_json(errors: /./)
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     let!(:organization) { create(:organization) }
 
