@@ -10,8 +10,7 @@ feature 'Staff user can delete the organization', js: true do
   background do
     visit new_staff_session_path
     sign_in staff
-    visit staff_home_index_path
-    find('#dashboard-organizations').click
+    visit '/organizations'
   end
 
   scenario 'deleting the organization' do

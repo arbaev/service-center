@@ -55,8 +55,8 @@
 </template>
 
 <script>
-  import {backend} from "../api/index";
-  import {empty} from '../../mixins/is_empty'
+  import {backend} from "../../api";
+  import {empty} from '../../../mixins/is_empty'
   import {
     QForm,
     QInput,

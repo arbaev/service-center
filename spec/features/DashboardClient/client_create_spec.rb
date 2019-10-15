@@ -10,8 +10,7 @@ feature 'Staff user can create Client user', js: true do
   background do
     visit new_staff_session_path
     sign_in staff
-    visit staff_home_index_path
-    find('#tab-clients').click
+    visit '/clients'
   end
 
   scenario 'creating the Client' do

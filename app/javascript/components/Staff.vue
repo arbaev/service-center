@@ -5,30 +5,7 @@
 
       q-page-container
         p {{ message }}
-
-        q-card
-          q-tabs(
-            v-model="tab"
-            active-color="primary"
-            indicator-color="primary"
-            align="justify"
-            narrow-indicator)
-
-            q-tab#tab-staffs(name="staffs" label="Staffs")
-            q-tab#tab-clients(name="clients" label="Clients")
-            q-tab#tab-organizations(name="organizations" label="Organizations")
-
-          q-separator
-
-          q-tab-panels(v-model="tab")
-            q-tab-panel(name="staffs")
-              DashboardStaffs
-
-            q-tab-panel(name="clients")
-              DashboardClients
-
-            q-tab-panel(name="organizations")
-              DashboardOrganizations
+        router-view
 
       FooterMain
 </template>
@@ -37,9 +14,9 @@
   import {backend} from "./app/api";
   import HeaderMain from './app/HeaderMain';
   import FooterMain from './app/FooterMain';
-  import DashboardStaffs from './app/staff/DashboardStaffs';
-  import DashboardClients from './app/staff/DashboardClients';
-  import DashboardOrganizations from './app/staff/DashboardOrganizations';
+  import DashboardStaffs from './app/staff/staffs/DashboardStaffs';
+  import DashboardClients from './app/staff/clients/DashboardClients';
+  import DashboardOrganizations from './app/staff/organizations/DashboardOrganizations';
   import {
     QLayout,
     QPageContainer,
@@ -47,12 +24,6 @@
     QDrawer,
     QPageSticky,
     QPageScroller,
-    QCard,
-    QTabs,
-    QTabPanels,
-    QTabPanel,
-    QTab,
-    QSeparator,
   } from 'quasar';
 
   export default {
@@ -70,12 +41,6 @@
       QDrawer,
       QPageSticky,
       QPageScroller,
-      QCard,
-      QTabs,
-      QTabPanels,
-      QTabPanel,
-      QTab,
-      QSeparator,
       HeaderMain,
       FooterMain,
       DashboardClients,

@@ -24,4 +24,6 @@ Rails.application.routes.draw do
 
     resources :home, only: :index
   end
+
+  get '/*slug', to: 'staff/home#index'
 end

@@ -9,8 +9,7 @@ feature 'List of all Staff users', js:true do
   background do
     visit new_staff_session_path
     sign_in staff
-    visit staff_home_index_path
-    find('#tab-staffs').click
+    visit '/staffs'
   end
 
   context 'there are some Staff users' do

@@ -15,7 +15,7 @@
 <script>
   import ClientsList from "./ClientsList";
   import NewClientForm from "./NewClientForm";
-  import {backend} from "../api";
+  import {backend} from "../../api";
   import {
     QSpinnerGears,
   } from 'quasar'

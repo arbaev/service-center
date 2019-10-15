@@ -14,7 +14,7 @@
 <script>
   import StaffsList from "./StaffsList";
   import NewStaffForm from "./NewStaffForm";
-  import {backend} from "../api";
+  import {backend} from "../../api";
   import {
     QSpinnerGears,
   } from 'quasar'

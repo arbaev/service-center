@@ -10,8 +10,7 @@ feature 'Staff user can create another Staff user', js: true do
   background do
     visit new_staff_session_path
     sign_in staff
-    visit staff_home_index_path
-    find('#tab-staffs').click
+    visit '/staffs'
   end
 
   scenario 'creating the Staff user' do

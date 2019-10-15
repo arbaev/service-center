@@ -13,9 +13,9 @@
 </template>
 
 <script>
-  import {backend} from '../api';
-  import NewOrganizationForm from '../staff/NewOrganizationForm';
-  import OrganizationsList from '../staff/OrganizationsList';
+  import {backend} from '../../api';
+  import NewOrganizationForm from './NewOrganizationForm';
+  import OrganizationsList from './OrganizationsList';
   import {
     QSpinnerGears,
   } from 'quasar';
