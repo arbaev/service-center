@@ -44,15 +44,21 @@ RSpec.describe Staff::ClientController, type: :controller do
   end
 
   describe 'POST #create' do
+    let(:request_create_client) do
+      post :create,
+      params: { client: attributes_for(:client) },
+      format: :json
+    end
+
     context 'with valid attributes' do
       before { login(staff) }
 
       it 'saves a new client in the database' do
-        expect { post :create, params: attributes_for(:client) }.to change(Client, :count).by(1)
+        expect { request_create_client }.to change(Client, :count).by(1)
       end
 
       it 'render json of new client' do
-        post :create, params: attributes_for(:client)
+        request_create_client
 
         client_json = ClientSerializer.new(Client.last).to_json
 
@@ -62,14 +68,20 @@ RSpec.describe Staff::ClientController, type: :controller do
     end
 
     context 'with invalid attributes' do
+      let(:request_create_client_invalid) do
+        post :create,
+             params: { client: attributes_for(:client, :invalid) },
+             format: :json
+      end
+
       before { login(staff) }
 
       it 'does not save new client' do
-        expect { post :create, params: attributes_for(:client, :invalid) }.to_not change(Client, :count)
+        expect { request_create_client_invalid }.to_not change(Client, :count)
       end
 
       it 'render json errors' do
-        post :create, params: attributes_for(:client, :invalid)
+        request_create_client_invalid
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include_json(errors: /./)
@@ -78,13 +90,13 @@ RSpec.describe Staff::ClientController, type: :controller do
 
     context 'with invalid credentials' do
       it 'does not save new client when unauthorized' do
-        expect { post :create, params: attributes_for(:client) }.to_not change(Client, :count)
+        expect { request_create_client }.to_not change(Client, :count)
       end
 
       it 'does not save new client when authorized as Client' do
         login(client)
 
-        expect { post :create, params: attributes_for(:client) }.to_not change(Client, :count)
+        expect { request_create_client }.to_not change(Client, :count)
       end
     end
   end
@@ -126,7 +138,7 @@ RSpec.describe Staff::ClientController, type: :controller do
 
     context 'with invalid attributes' do
       it 'render json of new client errors' do
-        post :validation, params: { phone: 'abc', email: 'xyz' }
+        post :validation, params: { client: { phone: 'abc', email: 'xyz' } }
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include_json(errors: { phone: /./, email: /./ })
@@ -137,7 +149,7 @@ RSpec.describe Staff::ClientController, type: :controller do
       let(:client_attrs) { attributes_for(:client) }
 
       it 'render json of new client' do
-        post :validation, params: client_attrs
+        post :validation, params: { client: client_attrs }
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include_json(data: { id: nil, type: 'client',

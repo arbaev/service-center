@@ -44,6 +44,6 @@ class Staff::ClientController < ApplicationController
   end
 
   def client_params
-    params.permit(:fullname, :phone, :email, :password)
+    params.require(:client).permit(:fullname, :phone, :email, :password)
   end
 end
