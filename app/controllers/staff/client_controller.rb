@@ -18,6 +18,16 @@ class Staff::ClientController < ApplicationController
     end
   end
 
+  def update
+    @client = Client.find(params[:id])
+
+    if @client.update(client_params)
+      render json: serializer.new(@client), status: :ok
+    else
+      render json: { errors: @client.errors }, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     @client = Client.find(params[:id])
 

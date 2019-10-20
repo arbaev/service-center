@@ -101,6 +101,61 @@ RSpec.describe Staff::ClientController, type: :controller do
     end
   end
 
+  describe 'PATCH #update' do
+    before { login(staff) }
+
+    let!(:client) { create(:client) }
+    let!(:new_client) { build(:client) }
+
+    context 'with valid attributes' do
+      it 'assigns the requested Client to @client' do
+        patch :update, params: { id: client, client: attributes_for(:client) }, format: :json
+
+        expect(assigns(:client)).to eq client
+      end
+
+      it 'changes Client attributes' do
+        patch :update, params: { id: client, client: { fullname: 'new fullname' } }, format: :json
+        client.reload
+
+        expect(client.fullname).to eq 'new fullname'
+      end
+
+      it 'render json of updated client' do
+        patch :update, params: { id: client, client: { fullname: new_client.fullname } }, format: :json
+
+        expected_data = { data: { id: client.id.to_s, type: 'client',
+                                  attributes: {
+                                    fullname: new_client.fullname
+                                  } } }
+        client.reload
+
+        expect(response).to have_http_status :ok
+        expect(response.body).to include_json expected_data
+      end
+    end
+
+    context 'with invalid attributes' do
+      before do
+        patch :update,
+              params:
+                { id: client, client: attributes_for(:client, :invalid) },
+              format: :json
+      end
+
+      it 'does not change question' do
+        client.reload
+
+        expect(client.fullname).to eq client.fullname
+      end
+
+      it 'render json errors' do
+        expect(response).to have_http_status :unprocessable_entity
+        expect(response.body).to include_json errors: /./
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     let!(:client) { create(:client) }
 
