@@ -1,5 +1,7 @@
-class Equipment < ApplicationRecord
-  belongs_to :organization
+# frozen_string_literal: true
 
-  validates :name, :type, :sn, presence: true
+class Equipment < ApplicationRecord
+  belongs_to :organization, optional: true
+
+  validates :name, :kind, :sn, presence: true
 end
