@@ -1,9 +1,8 @@
 <template lang="pug">
   section#new-client-form-section
-    h4.text-h4 Add new client
     q-form#new-client-form(
-      @submit="addClient"
       ref="newClientForm"
+      @submit="submitClient"
       no-error-focus
       autocorrect="off"
       autocapitalize="off"
@@ -16,7 +15,7 @@
 
       q-input.q-mb-sm(
         v-model="client.fullname"
-        label="Your full name"
+        label="Client full name"
         @blur="validateForm"
         :rules="rules.fullname"
         lazy-rules
@@ -25,8 +24,8 @@
 
       q-input.q-mb-sm(
         v-model="client.phone"
+        label="Client phone number"
         @blur="validateClient"
-        label="Your phone number"
         mask="(###) ### - ####"
         hint="Mask: (###) ### - ####"
         :rules="rules.phone"
@@ -39,55 +38,54 @@
       q-input.q-mb-sm(
         v-model.trim="client.email"
         @blur="validateClient"
-        label="Your email"
+        label="Client email"
         type="email"
         :rules="rules.email"
         bottom-slots
         lazy-rules
         filled)
 
-      q-input.q-mb-sm(
-        v-model="client.password"
-        label="Enter password"
-        @input="validateForm"
-        :type="isPwd ? 'password' : 'text'"
-        :rules="rules.password"
-        lazy-rules
-        filled)
-        template(v-slot:append)
-          q-icon.cursor-pointer(
-            :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'"
-            @click="isPwd = !isPwd")
+      div(v-if="isNewRecord")
+        q-input.q-mb-sm(
+          v-model="client.password"
+          label="Enter password"
+          @input="validateForm"
+          :type="isPwd ? 'password' : 'text'"
+          :rules="rules.password"
+          lazy-rules
+          filled)
+          template(v-slot:append)
+            q-icon.cursor-pointer(
+              :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'"
+              @click="isPwd = !isPwd")
+      div(v-else)
+        a(href="/") Link to password restore
 
       q-btn.q-mb-sm.float-right(
-        label="Create new client"
         type="submit"
         :disable="disabled"
-        no-caps
-        color="primary")
+        color="primary"
+        no-caps)
+        template(v-slot="label") {{ btnLabel }}
 </template>
 
 <script>
   import {backend} from "../../api";
   import {empty} from '../../../mixins/is_empty';
+  import { bus } from '../../api/bus'
   import {
     QForm,
     QInput,
     QIcon,
     QBtn,
-    QBanner
   } from 'quasar';
 
   export default {
     name: "NewClientForm",
+    props: ['client'],
     mixins: [empty],
     data: function () {
       return {
-        client: {
-          fullname: '',
-          phone: '',
-          email: '',
-        },
         errors: {},
         disabled: true,
         isPwd: true,
@@ -114,7 +112,6 @@
       QInput,
       QIcon,
       QBtn,
-      QBanner
     },
     methods: {
       validateForm() {
@@ -122,13 +119,28 @@
           this.disabled = !success;
         })
       },
+      submitClient() {
+        this.isNewRecord ? this.addClient() : this.updateClient()
+      },
       addClient() {
         backend.staff.createClient(this.client)
           .then(response => {
-            this.$emit('reloadClientsList');
-            this.client = {};
             this.errors = {};
             this.$refs.newClientForm.resetValidation();
+            bus.$emit('reloadClientsList');
+            bus.$emit('resetClient');
+          })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          })
+      },
+      updateClient() {
+        backend.staff.updateClient(this.client)
+          .then(response => {
+            this.errors = {};
+            this.$refs.newClientForm.resetValidation();
+            bus.$emit('reloadClientsList');
+            bus.$emit('resetClient');
           })
           .catch(error => {
             this.errors = error.response.data.errors;
@@ -136,14 +148,15 @@
       },
       validateClient() {
         this.errors = {};
-
-        backend.staff.validateClient(this.client)
-          .then(response => {
-            this.validateForm();
-          })
-          .catch(error => {
-            this.isAlreadyTaken(error.response.data.errors, ['email', 'phone'])
-          })
+        if (this.isNewRecord) {
+          backend.staff.validateClient(this.client)
+            .then(response => {
+              this.validateForm();
+            })
+            .catch(error => {
+              this.isAlreadyTaken(error.response.data.errors, ['email', 'phone'])
+            })
+        }
       },
       isAlreadyTaken(errors, properties) {
         properties.forEach(property => {
@@ -156,8 +169,14 @@
       }
     },
     computed: {
+      isNewRecord() {
+        return !this.client.id;
+      },
+      btnLabel() {
+        return this.isNewRecord ? 'Create new client' : 'Edit client';
+      },
       isFullnameValid() {
-        let regexFullname = /^[A-z А-яЁё]*$/;
+        let regexFullname = /^[A-z .А-яЁё]*$/;
         return regexFullname.test(this.client.fullname);
       },
       // it doesn't need if Quasar phone mask used

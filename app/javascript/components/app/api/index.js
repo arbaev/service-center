@@ -14,6 +14,7 @@ const backend = {
     createStaff: (staff) => adapter.post('/staff/staff', { staff: staff }),
     clients: () => adapter.get('/staff/client'),
     createClient: (client) => adapter.post('/staff/client', { client: client }),
+    updateClient: (client) => adapter.patch(`/staff/client/${client.id}`, { client: client }),
     deleteClient: (id) => adapter.delete(`/staff/client/${id}`),
     validateClient: (client) => adapter.post('/staff/client/validation', client),
     orgTypes: () => adapter.get('/staff/org_type'),

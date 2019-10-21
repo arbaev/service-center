@@ -11,6 +11,14 @@
 
       template(v-slot:body-cell-actions="props")
         q-td(:props="props")
+          q-btn.action-edit(
+            @click="onEditClient(props.row)"
+            color="primary"
+            icon="far fa-edit"
+            size="sm"
+            round
+            flat)
+
           q-btn.action-delete(
             @click="onDeleteClient(props.row.id)"
             color="primary"
@@ -71,7 +79,10 @@
     methods: {
       onDeleteClient(id) {
         this.$emit('clickDeleteClient', id)
-      }
+      },
+      onEditClient(client) {
+        this.$emit('clickEditClient', client);
+      },
     }
   }
 </script>
