@@ -215,4 +215,14 @@ RSpec.describe Staff::ClientController, type: :controller do
       end
     end
   end
+
+  describe 'POST #reset_password' do
+    let!(:client) { create(:client) }
+
+    it 'return no content header' do
+      post :reset_password, params: { id: client }
+
+      expect(response).to have_http_status :found
+    end
+  end
 end

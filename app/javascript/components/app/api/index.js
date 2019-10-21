@@ -15,6 +15,7 @@ const backend = {
     clients: () => adapter.get('/staff/client'),
     createClient: (client) => adapter.post('/staff/client', { client: client }),
     updateClient: (client) => adapter.patch(`/staff/client/${client.id}`, { client: client }),
+    resetPasswordClient: (client) => adapter.post(`/staff/client/${client.id}/reset_password`),
     deleteClient: (id) => adapter.delete(`/staff/client/${id}`),
     validateClient: (client) => adapter.post('/staff/client/validation', client),
     orgTypes: () => adapter.get('/staff/org_type'),

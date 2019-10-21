@@ -47,6 +47,13 @@ class Staff::ClientController < ApplicationController
     end
   end
 
+  def reset_password
+    @client = Client.find(params[:id])
+    @client.send_reset_password_instructions
+
+    head :no_content
+  end
+
   private
 
   def serializer

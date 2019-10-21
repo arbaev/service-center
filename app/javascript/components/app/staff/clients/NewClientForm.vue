@@ -59,7 +59,11 @@
               :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'"
               @click="isPwd = !isPwd")
       div(v-else)
-        a(href="/") Link to password restore
+        q-btn.q-my-md(@click="resetPasswordClient"
+          :client="client"
+          label="Send reset password instructions"
+          color="negative"
+          no-caps)
 
       q-btn.q-mb-sm.float-right(
         type="submit"
@@ -142,6 +146,12 @@
             bus.$emit('reloadClientsList');
             bus.$emit('resetClient');
           })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          })
+      },
+      resetPasswordClient() {
+        backend.staff.resetPasswordClient(this.client)
           .catch(error => {
             this.errors = error.response.data.errors;
           })

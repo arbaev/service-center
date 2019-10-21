@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
     resources :client, only: %i[index create update destroy] do
       post :validation, on: :collection
+      post :reset_password, on: :member
     end
 
     resources :org_type, only: :index
