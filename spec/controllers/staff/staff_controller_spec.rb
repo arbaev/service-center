@@ -100,6 +100,60 @@ RSpec.describe Staff::StaffController, type: :controller do
     end
   end
 
+  describe 'PATCH #update' do
+    before { login(staff) }
+
+    let!(:staff_attrs) { attributes_for(:staff) }
+
+    context 'with valid attributes' do
+      before do
+        patch :update, params: { id: staff, staff: staff_attrs }, format: :json
+      end
+
+      it 'assigns the requested Staff to @staff' do
+        expect(assigns(:staff)).to eq staff
+      end
+
+      it 'changes Staff attributes' do
+        staff.reload
+
+        expect(staff.email).to eq staff_attrs[:email]
+      end
+
+      it 'render json of updated Staff user' do
+        expected_data = { data: { id: staff.id.to_s, type: 'staff',
+                                  attributes: {
+                                      email: staff_attrs[:email]
+                                  } } }
+        staff.reload
+
+        expect(response).to have_http_status :ok
+        expect(response.body).to include_json expected_data
+      end
+    end
+
+    context 'with invalid attributes' do
+      before do
+        patch :update,
+              params:
+                  { id: staff, staff: attributes_for(:staff, :invalid) },
+              format: :json
+      end
+
+      it 'does not change question' do
+        old_email = staff.email
+        staff.reload
+
+        expect(staff.email).to eq old_email
+      end
+
+      it 'render json errors' do
+        expect(response).to have_http_status :unprocessable_entity
+        expect(response.body).to include_json errors: /./
+      end
+    end
+  end
+
   describe 'GET #user' do
     context 'if authenticated staff user' do
       let(:staff) { create(:staff) }

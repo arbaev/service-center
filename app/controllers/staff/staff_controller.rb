@@ -18,6 +18,16 @@ class Staff::StaffController < ApplicationController
     end
   end
 
+  def update
+    @staff = Staff.find(params[:id])
+
+    if @staff.update(staff_params)
+      render json: serializer.new(@staff), status: :ok
+    else
+      render json: { errors: @staff.errors }, status: :unprocessable_entity
+    end
+  end
+
   def user
     if current_staff
       options = { links: { logout_link: destroy_staff_session_path } }
