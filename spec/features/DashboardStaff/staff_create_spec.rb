@@ -11,12 +11,12 @@ feature 'Staff user can create another Staff user', js: true do
     visit new_staff_session_path
     sign_in staff
     visit '/staffs'
+    click_on 'Add Staff'
   end
 
   scenario 'creating the Staff user' do
     fill_in 'Staff email', with: staff_new.email
     fill_in 'Enter password', with: staff_new.password
-    fill_in 'Repeat password', with: staff_new.password
     sleep 3 # unstable under VirtualBox without wait 3 sec minimum :-(
     click_on 'Create new Staff user'
 

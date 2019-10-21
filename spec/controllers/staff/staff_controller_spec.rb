@@ -193,4 +193,12 @@ RSpec.describe Staff::StaffController, type: :controller do
       end
     end
   end
+
+  describe 'POST #reset_password' do
+    it 'return no content header' do
+      post :reset_password, params: { id: staff }
+
+      expect(response).to have_http_status :success
+    end
+  end
 end

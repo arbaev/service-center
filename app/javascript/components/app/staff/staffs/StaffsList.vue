@@ -9,6 +9,16 @@
       :pagination.sync="pagination"
       row-key="email")
 
+      template(v-slot:body-cell-actions="props")
+        q-td(:props="props")
+          q-btn.action-edit(
+            @click="onEditStaff(props.row)"
+            color="primary"
+            icon="far fa-edit"
+            size="sm"
+            round
+            flat)
+
       template(v-slot:no-data="{ icon, message }")
         .full-width.row.flex-center.text-accent.q-gutter-sm
           q-icon(size="2em" name="fas fa-exclamation-triangle")
@@ -30,9 +40,9 @@
     data: function () {
       return {
         columns: [
-          { name: 'id', align: 'center', label: '#id', field: 'id', sortable: true },
-          { name: 'email', label: 'Email', field: row => row.attributes.email },
-          { name: 'actions', label: 'Действия' }
+          {name: 'id', align: 'center', label: '#id', field: 'id', sortable: true},
+          {name: 'email', label: 'Email', field: row => row.attributes.email},
+          {name: 'actions', label: 'Действия'}
         ],
         pagination: {
           sortBy: 'email',
@@ -48,5 +58,10 @@
       QBtn,
       QIcon,
     },
+    methods: {
+      onEditStaff(staff) {
+        this.$emit('clickEditStaff', staff);
+      },
+    }
   }
 </script>

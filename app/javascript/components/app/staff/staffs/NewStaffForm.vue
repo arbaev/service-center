@@ -1,8 +1,7 @@
 <template lang="pug">
   section#new-staff-form-section
-    h4.text-h4 Add new Staff user
     q-form#new-staff-form(
-      @submit="addStaff"
+      @submit="submitStaff"
       ref="newStaffForm"
       no-error-focus
       autocorrect="off"
@@ -16,6 +15,7 @@
 
       q-input.q-mb-sm(
         v-model.trim="staff.email"
+        @input="validateForm"
         label="Staff email"
         type="email"
         :rules="rules.email"
@@ -23,61 +23,53 @@
         lazy-rules
         filled)
 
-      q-input.q-mb-sm(
-        v-model="staff.password"
-        label="Enter password"
-        @input="validateForm"
-        :type="isPwd ? 'password' : 'text'"
-        :rules="rules.password"
-        lazy-rules
-        filled)
-        template(v-slot:append)
-          q-icon.cursor-pointer(
-            :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'"
-            @click="isPwd = !isPwd")
-
-      q-input.q-mb-sm(
-        v-model="staff.password_confirmation"
-        label="Repeat password"
-        @input="validateForm"
-        :type="isPwd ? 'password' : 'text'"
-        :rules="rules.password"
-        lazy-rules
-        filled)
-        template(v-slot:append)
-          q-icon.cursor-pointer(
-            :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'"
-            @click="isPwd = !isPwd")
+      div(v-if="isNewRecord")
+        q-input.q-mb-sm(
+          v-model="staff.password"
+          label="Enter password"
+          @input="validateForm"
+          :type="isPwd ? 'password' : 'text'"
+          :rules="rules.password"
+          lazy-rules
+          filled)
+          template(v-slot:append)
+            q-icon.cursor-pointer(
+              :name="isPwd ? 'fas fa-eye-slash' : 'fas fa-eye'"
+              @click="isPwd = !isPwd")
+      div(v-else)
+        q-btn.q-my-md(@click="resetPasswordStaff"
+          :staff="staff"
+          label="Send reset password instructions"
+          color="negative"
+          no-caps)
 
       q-btn.q-mb-sm.float-right(
-        label="Create new Staff user"
         type="submit"
         :disable="disabled"
-        no-caps
-        color="primary")
+        color="primary"
+        no-caps)
+        template(v-slot="label") {{ btnLabel }}
+
 </template>
 
 <script>
   import {backend} from "../../api";
   import {empty} from '../../../mixins/is_empty';
+  import { bus } from '../../api/bus'
   import {
     QForm,
     QInput,
     QIcon,
     QBtn,
-    QBanner
+    QBanner,
   } from 'quasar';
 
   export default {
     name: "NewStaffForm",
+    props: ['staff'],
     mixins: [empty],
     data: function () {
       return {
-        staff: {
-          email: '',
-          password: '',
-          password_confirmation: '',
-        },
         errors: {},
         disabled: true,
         isPwd: true,
@@ -95,7 +87,7 @@
       QInput,
       QIcon,
       QBtn,
-      QBanner
+      QBanner,
     },
     methods: {
       validateForm() {
@@ -103,20 +95,47 @@
           this.disabled = !success;
         })
       },
+      submitStaff() {
+        this.isNewRecord ? this.addStaff() : this.updateStaff()
+      },
       addStaff() {
         backend.staff.createStaff(this.staff)
           .then(response => {
-            this.$emit('reloadStaffsList');
-            this.staff = {};
             this.errors = {};
             this.$refs.newStaffForm.resetValidation();
+            bus.$emit('reloadStaffsList');
+            bus.$emit('resetStaff');
           })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          })
+      },
+      updateStaff() {
+        backend.staff.updateStaff(this.staff)
+          .then(response => {
+            this.errors = {};
+            this.$refs.newStaffForm.resetValidation();
+            bus.$emit('reloadStaffsList');
+            bus.$emit('resetStaff');
+          })
+          .catch(error => {
+            this.errors = error.response.data.errors;
+          })
+      },
+      resetPasswordStaff() {
+        backend.staff.resetPasswordStaff(this.staff)
           .catch(error => {
             this.errors = error.response.data.errors;
           })
       },
     },
     computed: {
+      isNewRecord() {
+        return !this.staff.id;
+      },
+      btnLabel() {
+        return this.isNewRecord ? 'Create new Staff user' : 'Edit Staff user';
+      },
       isEmailValid() {
         let regexEmail = /^.+@.+\..+/i;
         return regexEmail.test(this.staff.email);

@@ -14,8 +14,11 @@ Rails.application.routes.draw do
       post :reset_password, on: :member
     end
 
+    resources :staff, only: %i[index create update] do
+      post :reset_password, on: :member
+    end
+
     resources :org_type, only: :index
-    resources :staff, only: %i[index create update]
     resources :organization, only: %i[index create destroy]
     resources :home, only: :index
   end

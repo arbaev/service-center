@@ -28,6 +28,13 @@ class Staff::StaffController < ApplicationController
     end
   end
 
+  def reset_password
+    @staff = Staff.find(params[:id])
+    @staff.send_reset_password_instructions
+
+    head :no_content
+  end
+
   def user
     if current_staff
       options = { links: { logout_link: destroy_staff_session_path } }

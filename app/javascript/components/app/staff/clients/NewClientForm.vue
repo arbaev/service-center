@@ -82,6 +82,7 @@
     QInput,
     QIcon,
     QBtn,
+    QBanner,
   } from 'quasar';
 
   export default {
@@ -116,6 +117,7 @@
       QInput,
       QIcon,
       QBtn,
+      QBanner,
     },
     methods: {
       validateForm() {
