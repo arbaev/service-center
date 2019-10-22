@@ -13,6 +13,7 @@
       q-route-tab(to="/staffs" label="Staffs")
       q-route-tab(to="/clients" label="Clients")
       q-route-tab(to="/organizations" label="Organizations")
+      q-route-tab(to="/equipments" label="Equipments")
 
 </template>
 

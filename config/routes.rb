@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
     resources :org_type, only: :index
     resources :organization, only: %i[index create destroy]
+    resources :equipment, only: %i[index]
     resources :home, only: :index
   end
 

@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :equipment do
-    name { "MyString" }
-    kind { "Kind" }
-    sn { "MyString" }
+    name { Faker::Commerce.product_name }
+    kind { Faker::Commerce.material }
+    sn { Faker::IDNumber.valid }
   end
 end
