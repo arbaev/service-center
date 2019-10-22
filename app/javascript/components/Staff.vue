@@ -14,9 +14,6 @@
   import {backend} from "./app/api";
   import HeaderMain from './app/HeaderMain';
   import FooterMain from './app/FooterMain';
-  import DashboardStaffs from './app/staff/staffs/DashboardStaffs';
-  import DashboardClients from './app/staff/clients/DashboardClients';
-  import DashboardOrganizations from './app/staff/organizations/DashboardOrganizations';
   import {
     QLayout,
     QPageContainer,
@@ -43,9 +40,6 @@
       QPageScroller,
       HeaderMain,
       FooterMain,
-      DashboardClients,
-      DashboardStaffs,
-      DashboardOrganizations
     },
     created() {
       this.fetchCurrentUser();
