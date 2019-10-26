@@ -30,6 +30,7 @@ const backend = {
       { organization: organization }),
     // equipments
     equipments: () => adapter.get('/staff/equipment'),
+    updateEquipment: (eq) => adapter.patch(`/staff/equipment/${eq.id}`, { equipment: eq, organization_id: eq.organization_id }),
   }
 };
 

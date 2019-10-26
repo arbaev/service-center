@@ -32,4 +32,31 @@ RSpec.describe Staff::EquipmentController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    let(:equipment) { create(:equipment) }
+
+    before { login(staff) }
+
+    context 'update Equipment association with organization' do
+      let(:organization) { create(:organization) }
+
+      it 'assigns organization to equipment' do
+        expect(equipment.organization).to eq nil
+
+        patch :update, params: { id: equipment, organization_id: organization, equipment: attributes_for(:equipment) }, format: :json
+        equipment.reload
+
+        expect(equipment.organization).to eq organization
+      end
+
+      it 'render json of updated equipment' do
+        patch :update, params: { id: equipment, organization_id: organization, equipment: attributes_for(:equipment) }, format: :json
+
+        eq_json = EquipmentSerializer.new(Equipment.last).to_json
+
+        expect(response.body).to eq eq_json
+      end
+    end
+  end
 end

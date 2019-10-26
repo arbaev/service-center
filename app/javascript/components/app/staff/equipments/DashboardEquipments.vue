@@ -4,7 +4,8 @@
       .col.q-pa-sm
         EquipmentsList(
           :equipments-list="equipmentsList"
-          :loading="equipmentsListLoading")
+          :organizations-list="organizationsList"
+          :loaded="loaded")
 
 </template>
 
@@ -20,6 +21,8 @@
       return {
         equipmentsList: [],
         equipmentsListLoading: true,
+        organizationsList: [],
+        organizationsListLoading: true,
       }
     },
     components: {
@@ -28,6 +31,7 @@
     },
     created() {
       this.fetchEquipmentsList();
+      this.fetchOrganizationsList();
     },
     methods: {
       fetchEquipmentsList() {
@@ -36,6 +40,17 @@
           .catch(error => console.log(error))
           .finally(() => this.equipmentsListLoading = false);
       },
+      fetchOrganizationsList() {
+        backend.staff.organizations()
+          .then(response => { this.organizationsList = response.data.data; })
+          .catch(error => console.log(error))
+          .finally(() => this.organizationsListLoading = false);
+      },
+    },
+    computed: {
+      loaded() {
+        return !this.equipmentsListLoading && !this.organizationsListLoading;
+      }
     }
   }
 </script>
