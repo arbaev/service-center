@@ -1,23 +1,38 @@
 <template lang="pug">
   section#dashboard-organizations.q-mx-xl
     .row
-      .col-12.col-sm-6.q-pa-sm
-        NewOrganizationForm(@reloadOrganizationsList="fetchOrganizationsList")
+      .col.q-pa-sm
+        q-btn(@click="formDialog = true" color="primary" label="Add organization")
 
-      .col-12.col-sm-6.q-pa-sm
         OrganizationsList(
           :organizations-list="organizationsList"
           @clickDeleteOrg="deleteOrganization"
           :loading="organizationsListLoading")
 
+        q-dialog(v-model="formDialog" persistent)
+          q-card.form-dialog
+            q-card-section.row.items-center
+              .text-h4 Add new organization
+              q-space
+              q-btn(@click="resetCurrentOrganization" icon="fas fa-times" flat round)
+            q-card-section.q-pa-md
+              NewOrganizationForm(:organization="organization")
+
 </template>
 
 <script>
   import {backend} from '../../api';
+  import { bus } from '../../api/bus';
   import NewOrganizationForm from './NewOrganizationForm';
   import OrganizationsList from './OrganizationsList';
   import {
     QSpinnerGears,
+    QDialog,
+    QCard,
+    QCardSection,
+    QCardActions,
+    QBtn,
+    QSpace,
   } from 'quasar';
 
   export default {
@@ -26,15 +41,27 @@
         organizationsList: [],
         organizationsListLoading: true,
         orgTypes: [],
+        organization: {},
+        formDialog: false,
       }
     },
     components: {
       NewOrganizationForm,
       OrganizationsList,
       QSpinnerGears,
+      QDialog,
+      QCard,
+      QCardSection,
+      QCardActions,
+      QBtn,
+      QSpace,
     },
     created() {
       this.fetchOrganizationTypes();
+    },
+    mounted() {
+      bus.$on('resetOrganization', this.resetCurrentOrganization);
+      bus.$on('reloadOrganizationsList', this.fetchOrganizationTypes);
     },
     methods: {
       fetchOrganizationTypes() {
@@ -69,7 +96,11 @@
             }
           )
           .catch(error => console.log(error));
-      }
+      },
+      resetCurrentOrganization() {
+        this.formDialog = false;
+        this.organization = {};
+      },
     }
   }
 </script>

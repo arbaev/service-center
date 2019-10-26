@@ -10,6 +10,7 @@ feature 'Staff user can create Organization', js: true do
     visit new_staff_session_path
     sign_in staff
     visit '/organizations'
+    click_on 'Add organization'
   end
 
   xscenario 'creating the Organization' do
