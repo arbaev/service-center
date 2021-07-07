@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Client, type: :model do
+  it { should have_many(:orders) }
+  it { should have_many(:organizations).through(:orders).dependent(:destroy) }
+
   it { should validate_presence_of :email }
 
   describe 'fullname validations' do

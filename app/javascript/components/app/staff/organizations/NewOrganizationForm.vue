@@ -1,6 +1,5 @@
 <template lang="pug">
   section#new-organization-form-section
-    h4.text-h4 Add new organization
     q-form#new-organization-form(
       @submit="addOrganization"
       ref="newOrganizationForm"
@@ -55,8 +54,9 @@
 </template>
 
 <script>
-  import {backend} from "../api/index";
-  import {empty} from '../../mixins/is_empty'
+  import {backend} from "../../api";
+  import { bus } from '../../api/bus';
+  import {empty} from '../../../mixins/is_empty'
   import {
     QForm,
     QInput,
@@ -66,15 +66,12 @@
   } from 'quasar'
 
   export default {
+    props: {
+      organization: Object
+    },
     mixins: [empty],
     data: function () {
       return {
-        organization: {
-          name: '',
-          org_type_id: '',
-          inn: '',
-          ogrn: ''
-        },
         orgTypes: [],
         errors: {},
         disabled: true
@@ -104,10 +101,10 @@
       addOrganization() {
         backend.staff.createOrganization(this.organization)
           .then(response => {
-            this.$emit('reloadOrganizationsList');
-            this.organization = {};
             this.errors = {};
             this.$refs.newOrganizationForm.resetValidation();
+            bus.$emit('reloadOrganizationsList');
+            bus.$emit('resetOrganization');
           })
           .catch(error => {
             this.errors = error.response.data.errors;

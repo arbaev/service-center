@@ -18,6 +18,26 @@ class Staff::ClientController < ApplicationController
     end
   end
 
+  def update
+    @client = Client.find(params[:id])
+
+    if @client.update(client_params)
+      render json: serializer.new(@client), status: :ok
+    else
+      render json: { errors: @client.errors }, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @client = Client.find(params[:id])
+
+    if @client.destroy
+      render json: serializer.new(@client), status: :ok
+    else
+      render json: { errors: @client.errors }, status: :unprocessable_entity
+    end
+  end
+
   def validation
     @client = Client.new(client_params)
     if @client.valid?
@@ -27,6 +47,13 @@ class Staff::ClientController < ApplicationController
     end
   end
 
+  def reset_password
+    @client = Client.find(params[:id])
+    @client.send_reset_password_instructions
+
+    head :no_content
+  end
+
   private
 
   def serializer
@@ -34,6 +61,6 @@ class Staff::ClientController < ApplicationController
   end
 
   def client_params
-    params.permit(:fullname, :phone, :email, :password)
+    params.require(:client).permit(:fullname, :phone, :email, :password)
   end
 end

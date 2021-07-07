@@ -8,15 +8,11 @@ feature 'List of all Organizations', js: true do
   background do
     visit new_staff_session_path
     sign_in staff
+    visit '/organizations'
   end
 
   context 'there are some organizations' do
     given!(:organizations) { create_list(:organization, 5) }
-
-    background do
-      visit staff_home_index_path
-      find('#dashboard-organizations').click
-    end
 
     scenario 'show first page of list' do
       within('#organizations-list-table table') do

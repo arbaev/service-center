@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Client < ApplicationRecord
+  has_many :orders
+  has_many :organizations, through: :orders, dependent: :destroy
+
   devise :database_authenticatable, :recoverable, :rememberable, :validatable
 
   before_validation :phone_normalize
