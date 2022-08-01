@@ -44,15 +44,21 @@ RSpec.describe Staff::ClientController, type: :controller do
   end
 
   describe 'POST #create' do
+    let(:request_create_client) do
+      post :create,
+      params: { client: attributes_for(:client) },
+      format: :json
+    end
+
     context 'with valid attributes' do
       before { login(staff) }
 
       it 'saves a new client in the database' do
-        expect { post :create, params: attributes_for(:client) }.to change(Client, :count).by(1)
+        expect { request_create_client }.to change(Client, :count).by(1)
       end
 
       it 'render json of new client' do
-        post :create, params: attributes_for(:client)
+        request_create_client
 
         client_json = ClientSerializer.new(Client.last).to_json
 
@@ -62,14 +68,20 @@ RSpec.describe Staff::ClientController, type: :controller do
     end
 
     context 'with invalid attributes' do
+      let(:request_create_client_invalid) do
+        post :create,
+             params: { client: attributes_for(:client, :invalid) },
+             format: :json
+      end
+
       before { login(staff) }
 
       it 'does not save new client' do
-        expect { post :create, params: attributes_for(:client, :invalid) }.to_not change(Client, :count)
+        expect { request_create_client_invalid }.to_not change(Client, :count)
       end
 
       it 'render json errors' do
-        post :create, params: attributes_for(:client, :invalid)
+        request_create_client_invalid
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include_json(errors: /./)
@@ -78,13 +90,100 @@ RSpec.describe Staff::ClientController, type: :controller do
 
     context 'with invalid credentials' do
       it 'does not save new client when unauthorized' do
-        expect { post :create, params: attributes_for(:client) }.to_not change(Client, :count)
+        expect { request_create_client }.to_not change(Client, :count)
       end
 
       it 'does not save new client when authorized as Client' do
         login(client)
 
-        expect { post :create, params: attributes_for(:client) }.to_not change(Client, :count)
+        expect { request_create_client }.to_not change(Client, :count)
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    before { login(staff) }
+
+    let!(:client) { create(:client) }
+    let!(:new_client) { build(:client) }
+
+    context 'with valid attributes' do
+      it 'assigns the requested Client to @client' do
+        patch :update, params: { id: client, client: attributes_for(:client) }, format: :json
+
+        expect(assigns(:client)).to eq client
+      end
+
+      it 'changes Client attributes' do
+        patch :update, params: { id: client, client: { fullname: 'new fullname' } }, format: :json
+        client.reload
+
+        expect(client.fullname).to eq 'new fullname'
+      end
+
+      it 'render json of updated client' do
+        patch :update, params: { id: client, client: { fullname: new_client.fullname } }, format: :json
+
+        expected_data = { data: { id: client.id.to_s, type: 'client',
+                                  attributes: {
+                                    fullname: new_client.fullname
+                                  } } }
+        client.reload
+
+        expect(response).to have_http_status :ok
+        expect(response.body).to include_json expected_data
+      end
+    end
+
+    context 'with invalid attributes' do
+      before do
+        patch :update,
+              params:
+                { id: client, client: attributes_for(:client, :invalid) },
+              format: :json
+      end
+
+      it 'does not change question' do
+        client.reload
+
+        expect(client.fullname).to eq client.fullname
+      end
+
+      it 'render json errors' do
+        expect(response).to have_http_status :unprocessable_entity
+        expect(response.body).to include_json errors: /./
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let!(:client) { create(:client) }
+
+    context 'Staff delete client' do
+      before { login(staff) }
+
+      it 'deletes the client' do
+        expect { delete :destroy, params: { id: client } }.to change(Client, :count).by(-1)
+      end
+
+      it 'return :ok and deleted client' do
+        delete :destroy, params: { id: client }
+
+        expect(response).to have_http_status :ok
+        expect(response.body).to have_text client.fullname
+      end
+    end
+
+    context 'Unauthorized user delete client' do
+      before { login(client) }
+
+      it 'but client does not deletes' do
+        expect { delete :destroy, params: { id: client } }.to_not change(Client, :count)
+      end
+
+      it 'redirect to login page' do
+        delete :destroy, params: { id: client }
+        expect(response).to redirect_to new_staff_session_path
       end
     end
   end
@@ -94,7 +193,7 @@ RSpec.describe Staff::ClientController, type: :controller do
 
     context 'with invalid attributes' do
       it 'render json of new client errors' do
-        post :validation, params: { phone: 'abc', email: 'xyz' }
+        post :validation, params: { client: { phone: 'abc', email: 'xyz' } }
 
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include_json(errors: { phone: /./, email: /./ })
@@ -105,7 +204,7 @@ RSpec.describe Staff::ClientController, type: :controller do
       let(:client_attrs) { attributes_for(:client) }
 
       it 'render json of new client' do
-        post :validation, params: client_attrs
+        post :validation, params: { client: client_attrs }
 
         expect(response).to have_http_status(:ok)
         expect(response.body).to include_json(data: { id: nil, type: 'client',
@@ -114,6 +213,16 @@ RSpec.describe Staff::ClientController, type: :controller do
                                                         email: client_attrs[:email]
                                                       } })
       end
+    end
+  end
+
+  describe 'POST #reset_password' do
+    let!(:client) { create(:client) }
+
+    it 'return no content header' do
+      post :reset_password, params: { id: client }
+
+      expect(response).to have_http_status :found
     end
   end
 end

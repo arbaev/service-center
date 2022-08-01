@@ -8,6 +8,13 @@
         span.q-px-sm Tim Service Center
 
       LoginPanel(:user="user")
+
+    q-tabs
+      q-route-tab(to="/staffs" label="Staffs")
+      q-route-tab(to="/clients" label="Clients")
+      q-route-tab(to="/organizations" label="Organizations")
+      q-route-tab(to="/equipments" label="Equipments")
+
 </template>
 
 <script>
@@ -16,7 +23,10 @@
     QHeader,
     QToolbar,
     QToolbarTitle,
-    QAvatar
+    QAvatar,
+    QTabs,
+    QTab,
+    QRouteTab,
   } from 'quasar'
 
   export default {
@@ -30,6 +40,9 @@
       QToolbar,
       QToolbarTitle,
       QAvatar,
+      QTabs,
+      QTab,
+      QRouteTab,
     },
   }
 </script>

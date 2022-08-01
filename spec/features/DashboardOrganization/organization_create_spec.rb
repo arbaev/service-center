@@ -9,8 +9,8 @@ feature 'Staff user can create Organization', js: true do
   background do
     visit new_staff_session_path
     sign_in staff
-    visit staff_home_index_path
-    find('#tab-organizations').click
+    visit '/organizations'
+    click_on 'Add organization'
   end
 
   xscenario 'creating the Organization' do

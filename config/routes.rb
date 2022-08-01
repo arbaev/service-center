@@ -9,12 +9,18 @@ Rails.application.routes.draw do
   namespace :staff do
     get :user, to: 'staff#user'
 
-    resources :client, only: %i[index create] do
+    resources :client, only: %i[index create update destroy] do
       post :validation, on: :collection
+      post :reset_password, on: :member
+    end
+
+    resources :staff, only: %i[index create update] do
+      post :reset_password, on: :member
     end
 
     resources :org_type, only: :index
     resources :organization, only: %i[index create destroy]
+    resources :equipment, only: %i[index update]
     resources :home, only: :index
   end
 
@@ -23,4 +29,6 @@ Rails.application.routes.draw do
 
     resources :home, only: :index
   end
+
+  get '/*slug', to: 'staff/home#index'
 end

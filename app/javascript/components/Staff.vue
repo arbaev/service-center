@@ -5,36 +5,15 @@
 
       q-page-container
         p {{ message }}
-
-        q-card
-          q-tabs(
-            v-model="tab"
-            active-color="primary"
-            indicator-color="primary"
-            align="justify"
-            narrow-indicator)
-
-            q-tab#tab-clients(name="clients" label="Clients")
-            q-tab#tab-organizations(name="organizations" label="Organizations")
-
-          q-separator
-
-          q-tab-panels(v-model="tab")
-            q-tab-panel(name="clients")
-              DashboardClients
-
-            q-tab-panel(name="organizations")
-              DashboardOrganizations
+        router-view
 
       FooterMain
 </template>
 
 <script>
   import {backend} from "./app/api";
-  import HeaderMain from './app/HeaderMain'
-  import FooterMain from './app/FooterMain'
-  import DashboardClients from './app/staff/DashboardClients'
-  import DashboardOrganizations from './app/staff/DashboardOrganizations'
+  import HeaderMain from './app/HeaderMain';
+  import FooterMain from './app/FooterMain';
   import {
     QLayout,
     QPageContainer,
@@ -42,13 +21,7 @@
     QDrawer,
     QPageSticky,
     QPageScroller,
-    QCard,
-    QTabs,
-    QTabPanels,
-    QTabPanel,
-    QTab,
-    QSeparator,
-  } from 'quasar'
+  } from 'quasar';
 
   export default {
     data: function () {
@@ -65,16 +38,8 @@
       QDrawer,
       QPageSticky,
       QPageScroller,
-      QCard,
-      QTabs,
-      QTabPanels,
-      QTabPanel,
-      QTab,
-      QSeparator,
       HeaderMain,
       FooterMain,
-      DashboardClients,
-      DashboardOrganizations
     },
     created() {
       this.fetchCurrentUser();
